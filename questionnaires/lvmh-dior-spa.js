@@ -6,6 +6,7 @@ window.QUESTIONNAIRE = {
   client: "Spa Dior",
   // Le contexte est dans le mail : la page ne montre que les questions.
   titre: "Spa Dior",
+  accroche: "Kikina compose, avec des chercheurs en neurosciences, un son qui s'adapte à l'espace et au corps, pour accompagner le soin en cabine comme le sommeil en chambre.",
   logoClient: "logos/dior.svg",
   duree: "2 minutes",
   // Photos Unsplash (licence libre), stockées dans images/spa/.
@@ -34,39 +35,42 @@ window.QUESTIONNAIRE = {
         {
           id: "espace_relaxation",
           label: "Et l'espace de relaxation ?",
-          points: [
-            "Il accueille les invités avant le soin, après ou les deux ?",
-            "Quels objectifs y sont visés en priorité (relâchement, perception du temps d'attente…) ?",
-            "Combien de personnes s'y trouvent en général en même temps ?"
-          ],
-          type: "texte-long",
-          placeholder: "Quelques mots suffisent"
+          type: "groupe",
+          champs: [
+            { id: "moment", court: "Moment", label: "Il accueille les invités", type: "choix", options: ["Avant le soin", "Après le soin", "Les deux"] },
+            { id: "objectifs", court: "Objectifs", label: "Quels objectifs y sont visés en priorité (relâchement, perception du temps d'attente…) ?", type: "texte", placeholder: "Quelques mots suffisent" },
+            { id: "personnes", court: "Personnes en même temps", label: "Combien de personnes s'y trouvent en général en même temps ?", type: "choix", options: ["1 à 2", "3 à 5", "6 à 10", "Plus de 10"] }
+          ]
         },
         {
           id: "dates_test",
           label: "Un test en novembre ou décembre nous convient très bien. Quelles dates vous arrangent ?",
           type: "texte",
+          icone: "calendrier",
           placeholder: "Ex. semaine du 16 novembre"
         }
       ]
     },
     {
       titre: "L'expérience sommeil",
-      image: "images/spa/sommeil-lit.jpg",
+      nuit: true,
+      image: "images/spa/sommeil-nuit.jpg",
       questions: [
         {
           id: "service_chambre",
-          label: "Pourriez-vous nous en dire un peu plus sur ce que vous entendez par service en chambre, comme le Slowing Down à Pitrizza dont parle Aude ?",
-          type: "texte-long"
+          label: "Comment imaginez-vous ce service en chambre ? Par exemple autour du Slowing Down à Pitrizza, évoqué par Aude.",
+          type: "texte-long",
+          placeholder: "Le moment, le format, ce que vous aimeriez que l'invité ressente…"
         },
         {
           id: "equipement_sommeil",
-          label: "L'expérience se ferait plutôt avec un équipement fourni par l'hôtel, ou sur le téléphone et les écouteurs de l'invité ?",
+          label: "Comment souhaitez-vous que l'expérience sonore soit vécue en chambre ?",
           type: "choix",
           options: [
-            { texte: "Équipement fourni par l'hôtel (casque, masque, iPad ou TV)", detail: "On peut vous accompagner sur le choix, l'achat ou la location, et la mise en place." },
-            "Téléphone et écouteurs de l'invité",
-            "Les deux, à discuter"
+            { texte: "Sur un équipement individuel fourni par l'hôtel (casque, masque, iPad ou TV)", detail: "On peut vous accompagner sur le choix, l'achat ou la location, et la mise en place." },
+            "Sur le téléphone et les écouteurs de l'invité, via une app",
+            "Diffusée dans la chambre par des enceintes",
+            "Les trois, à discuter"
           ]
         }
       ]

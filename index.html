@@ -208,7 +208,8 @@
 
   if (!id) return message("Ce lien est incomplet. Écrivez-nous à " + CONTACT + ".");
   const s = document.createElement("script");
-  s.src = "questionnaires/" + id + ".js";
+  // Toujours la dernière version des questions, sans attendre le cache du navigateur.
+  s.src = "questionnaires/" + id + ".js?t=" + Date.now();
   s.onload = () => window.QUESTIONNAIRE ? demarrer(window.QUESTIONNAIRE) : introuvable();
   s.onerror = introuvable;
   document.body.appendChild(s);

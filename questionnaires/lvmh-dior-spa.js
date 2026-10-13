@@ -6,6 +6,8 @@ window.QUESTIONNAIRE = {
   client: "Spa Dior",
   // Le contexte est dans le mail : la page ne montre que les questions.
   titre: "Spa Dior",
+  logoClient: "logos/dior.svg",
+  duree: "3 minutes",
   merci: "Merci, vos réponses sont bien arrivées.",
   sections: [
     {

@@ -6,103 +6,173 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Kikina · Questionnaire</title>
 <style>
-  @font-face { font-family: "Whyte Inktrap"; src: url("fonts/WhyteInktrap-Light.ttf") format("truetype"); font-weight: 300; font-display: swap; }
-  @font-face { font-family: "Whyte Inktrap"; src: url("fonts/WhyteInktrap-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
-  @font-face { font-family: "Whyte Inktrap"; src: url("fonts/WhyteInktrap-Medium.ttf") format("truetype"); font-weight: 500; font-display: swap; }
+  @font-face { font-family: "Whyte Inktrap"; src: url("fonts/WhyteInktrap-Light.ttf?v=2") format("truetype"); font-weight: 300; font-display: swap; }
+  @font-face { font-family: "Whyte Inktrap"; src: url("fonts/WhyteInktrap-Regular.ttf?v=2") format("truetype"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "Whyte Inktrap"; src: url("fonts/WhyteInktrap-Medium.ttf?v=2") format("truetype"); font-weight: 500; font-display: swap; }
 
   :root {
     --fond: #faf8f4;
+    --carte: #ffffff;
     --texte: #111111;
-    --texte-doux: #77736c;
-    --ligne: #dcd8d0;
-    --ligne-forte: #111111;
+    --texte-doux: #7a766f;
+    --texte-pale: #a8a39a;
+    --ligne: #e3dfd7;
+    --ligne-moyenne: #cfcac0;
     --erreur: #9a3b2e;
     --police: "Whyte Inktrap", "Helvetica Neue", Arial, sans-serif;
+    --courbe: cubic-bezier(.2, .7, .2, 1);
   }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
-  body { margin: 0; min-height: 100vh; background: var(--fond); color: var(--texte); font-family: var(--police); font-weight: 300; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
-  .page { max-width: 640px; margin: 0 auto; padding: 40px 24px 120px; }
-
-  header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 120px; }
-  .logo { font-weight: 400; font-size: 15px; letter-spacing: .02em; }
-  .tag { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--texte-doux); }
-
-  h1 { font-weight: 300; font-size: clamp(30px, 6vw, 40px); line-height: 1.15; margin: 0 0 96px; letter-spacing: -.01em; }
-  .intro { color: var(--texte-doux); max-width: 52ch; margin: -64px 0 96px; }
-
-  .section { margin: 0 0 88px; }
-  .section-titre { display: flex; align-items: baseline; gap: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--ligne); margin-bottom: 44px; }
-  .section-titre .num { font-size: 12px; color: var(--texte-doux); letter-spacing: .1em; }
-  .section-titre h2 { font-weight: 400; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; margin: 0; }
-
-  .q { margin: 0 0 48px; }
-  .q[hidden] { display: none; }
-  .q-label { display: block; font-size: 17px; font-weight: 300; margin-bottom: 18px; max-width: 56ch; }
-  .q-label .requis { color: var(--texte-doux); }
-
-  input[type=text], textarea {
-    width: 100%; font: inherit; font-size: 16px; color: var(--texte); background: transparent;
-    border: 0; border-bottom: 1px solid var(--ligne); border-radius: 0; padding: 10px 0; outline: none; transition: border-color .2s;
+  body {
+    margin: 0; min-height: 100vh; min-height: 100dvh; background: var(--fond); color: var(--texte);
+    font-family: var(--police); font-weight: 300; font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+    display: flex; flex-direction: column;
   }
-  textarea { min-height: 88px; resize: vertical; }
-  input[type=text]::placeholder, textarea::placeholder { color: #b3aea5; }
-  input[type=text]:focus, textarea:focus { border-bottom-color: var(--ligne-forte); }
+  button { font: inherit; }
+  img { display: block; }
 
-  .options { display: flex; flex-direction: column; gap: 2px; }
-  .opt { position: relative; display: block; }
-  .opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
-  .opt span { display: flex; align-items: center; gap: 14px; padding: 8px 0; font-size: 16px; cursor: pointer; user-select: none; color: var(--texte-doux); transition: color .2s; }
-  .opt span::before { content: ""; flex: none; width: 12px; height: 12px; border: 1px solid #a9a49b; border-radius: 50%; transition: all .2s; }
-  .opt input[type=checkbox] + span::before { border-radius: 0; }
-  .opt:hover span { color: var(--texte); }
-  .opt input:checked + span { color: var(--texte); }
-  .opt input:checked + span::before { background: var(--texte); border-color: var(--texte); box-shadow: inset 0 0 0 2px var(--fond); }
-  .opt input:focus-visible + span { outline: 1px solid var(--texte); outline-offset: 4px; }
-  .autre-champ { margin-top: 8px; }
+  /* Barre du haut */
+  .barre { position: sticky; top: 0; z-index: 5; background: rgba(250, 248, 244, .92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .barre-int { max-width: 1080px; margin: 0 auto; padding: 22px 28px 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .duo { display: flex; align-items: center; gap: 16px; }
+  .duo .kikina { height: 15px; width: auto; }
+  .duo .client { height: 22px; width: auto; }
+  .duo .croix { width: 9px; height: 9px; position: relative; opacity: .5; }
+  .duo .croix::before, .duo .croix::after { content: ""; position: absolute; left: 50%; top: 0; width: 1px; height: 100%; background: var(--texte); }
+  .duo .croix::before { transform: rotate(45deg); }
+  .duo .croix::after { transform: rotate(-45deg); }
+  .compteur { font-size: 12px; letter-spacing: .14em; color: var(--texte-doux); font-variant-numeric: tabular-nums; }
+  .progression { max-width: 1080px; margin: 0 auto; padding: 0 28px; display: flex; gap: 4px; height: 2px; }
+  .progression span { flex: 1; background: var(--ligne); transition: background .5s var(--courbe); }
+  .progression span.fait { background: var(--texte); }
+  .progression span.coupure { margin-left: 10px; }
+  .barre.cachee .progression, .barre.cachee .compteur, .barre.cachee .duo { visibility: hidden; }
 
-  .envoi { padding-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
-  button {
-    font: inherit; font-size: 12px; font-weight: 400; letter-spacing: .16em; text-transform: uppercase; cursor: pointer;
-    color: var(--fond); background: var(--texte); border: 1px solid var(--texte); border-radius: 0; padding: 18px 36px; transition: opacity .2s;
+  /* Scène */
+  main { flex: 1; display: flex; }
+  .scene { flex: 1; width: 100%; max-width: 760px; margin: 0 auto; padding: 8vh 28px 64px; display: flex; flex-direction: column; justify-content: center; }
+  .entre { animation: entre .6s var(--courbe) both; }
+  @keyframes entre { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  .surtitre { font-size: 12px; font-weight: 400; letter-spacing: .16em; text-transform: uppercase; color: var(--texte-doux); margin: 0 0 28px; display: flex; gap: 14px; }
+  .surtitre .num { color: var(--texte-pale); }
+
+  /* Accueil */
+  .accueil { text-align: center; align-items: center; }
+  .accueil .duo { gap: 28px; margin-bottom: 72px; }
+  .accueil .duo .kikina { height: 26px; }
+  .accueil .duo .client { height: 40px; }
+  .accueil .duo .croix { width: 14px; height: 14px; }
+  .accueil h1 { font-weight: 300; font-size: clamp(38px, 7vw, 60px); line-height: 1.05; letter-spacing: -.015em; margin: 0 0 22px; }
+  .accueil .format { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--texte-doux); margin: 0 0 56px; }
+  .onde { display: flex; align-items: center; justify-content: center; gap: 5px; height: 40px; margin: 0 0 56px; }
+  .onde i { display: block; width: 2px; border-radius: 2px; background: var(--texte); opacity: .8; animation: onde 2.4s ease-in-out infinite; }
+  @keyframes onde { 0%, 100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
+  .etapes { list-style: none; padding: 0; margin: 0 auto 64px; width: 100%; max-width: 440px; text-align: left; border-top: 1px solid var(--ligne); }
+  .etapes li { display: flex; align-items: baseline; gap: 18px; padding: 16px 2px; border-bottom: 1px solid var(--ligne); font-size: 16px; }
+  .etapes .num { font-size: 12px; letter-spacing: .1em; color: var(--texte-pale); }
+  .etapes .nb { margin-left: auto; font-size: 13px; color: var(--texte-doux); }
+
+  /* Question */
+  .question h2 { font-weight: 300; font-size: clamp(26px, 4.4vw, 38px); line-height: 1.2; letter-spacing: -.01em; margin: 0 0 44px; max-width: 24ch; }
+  .question h2.long { max-width: 30ch; font-size: clamp(24px, 3.8vw, 32px); }
+  .question h2 .requis { color: var(--texte-pale); }
+
+  .tuiles { display: grid; gap: 12px; }
+  .tuile {
+    position: relative; display: flex; align-items: center; gap: 18px; width: 100%; text-align: left; cursor: pointer;
+    background: var(--carte); border: 1px solid var(--ligne); border-radius: 2px; padding: 20px 22px; color: var(--texte);
+    font-size: 17px; font-weight: 300; line-height: 1.35; transition: border-color .25s, box-shadow .25s, transform .15s;
   }
-  button:hover { opacity: .85; }
-  button:disabled { opacity: .4; cursor: wait; }
-  button.secondaire { background: transparent; color: var(--texte); }
-  .note { font-size: 13px; color: var(--texte-doux); }
-  .erreur { color: var(--erreur); font-size: 14px; width: 100%; }
+  .tuile:hover { border-color: var(--ligne-moyenne); box-shadow: 0 6px 24px rgba(17, 17, 17, .05); }
+  .tuile:active { transform: scale(.995); }
+  .tuile:focus-visible { outline: 1px solid var(--texte); outline-offset: 3px; }
+  .tuile .touche { flex: none; width: 26px; height: 26px; display: grid; place-items: center; border: 1px solid var(--ligne-moyenne); font-size: 11px; font-weight: 400; color: var(--texte-doux); transition: all .25s; }
+  .tuile.multi .touche { border-radius: 0; }
+  .tuile.choisie { border-color: var(--texte); }
+  .tuile.choisie .touche { background: var(--texte); border-color: var(--texte); color: var(--fond); }
 
-  .fin p { color: var(--texte-doux); max-width: 52ch; margin: -64px 0 0; }
-  .fin .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
-  .fin a.bouton { display: inline-block; text-decoration: none; color: var(--fond); background: var(--texte); padding: 18px 36px; font-size: 12px; font-weight: 400; letter-spacing: .16em; text-transform: uppercase; }
+  .saisie { width: 100%; font: inherit; font-weight: 300; color: var(--texte); background: transparent; border: 0; border-bottom: 1px solid var(--ligne-moyenne); border-radius: 0; outline: none; transition: border-color .25s; -webkit-appearance: none; appearance: none; }
+  input.saisie { font-size: clamp(22px, 3.4vw, 28px); line-height: 1.4; height: auto; padding: 8px 0 12px; }
+  textarea.saisie { font-size: 20px; line-height: 1.5; padding: 8px 0 12px; min-height: 140px; resize: vertical; }
+  .saisie::placeholder { color: var(--texte-pale); opacity: 1; }
+  .saisie:focus { border-bottom-color: var(--texte); }
+  .autre { margin-top: 18px; }
+  .autre .saisie { font-size: 17px; padding: 8px 0 10px; }
 
-  footer { margin-top: 140px; padding-top: 20px; border-top: 1px solid var(--ligne); font-size: 12px; color: var(--texte-doux); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .actions { display: flex; align-items: center; gap: 22px; margin-top: 48px; flex-wrap: wrap; }
+  .bouton {
+    display: inline-flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none;
+    font-size: 12px; font-weight: 400; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--fond); background: var(--texte); border: 1px solid var(--texte); border-radius: 0; padding: 18px 34px; transition: opacity .2s;
+  }
+  .bouton:hover { opacity: .86; }
+  .bouton:disabled { opacity: .4; cursor: wait; }
+  .bouton.leger { background: transparent; color: var(--texte); }
+  .lien { background: none; border: 0; padding: 6px 0; cursor: pointer; color: var(--texte-doux); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+  .lien:hover { color: var(--texte); }
+  .aide { font-size: 12px; color: var(--texte-pale); letter-spacing: .04em; }
+  .aide kbd { font: inherit; border: 1px solid var(--ligne-moyenne); padding: 1px 6px; }
+  .erreur { color: var(--erreur); font-size: 14px; margin-top: 16px; min-height: 1em; }
+
+  /* Récapitulatif */
+  .recap h2 { font-weight: 300; font-size: clamp(30px, 5vw, 42px); margin: 0 0 48px; letter-spacing: -.01em; }
+  .recap-section { margin: 0 0 36px; }
+  .recap-section h3 { font-size: 12px; font-weight: 400; letter-spacing: .16em; text-transform: uppercase; color: var(--texte-doux); margin: 0 0 6px; padding-bottom: 12px; border-bottom: 1px solid var(--ligne); }
+  .recap-ligne { display: grid; grid-template-columns: 1fr auto; gap: 4px 24px; padding: 16px 0; border-bottom: 1px solid var(--ligne); }
+  .recap-ligne .ql { font-size: 14px; color: var(--texte-doux); }
+  .recap-ligne .rep { grid-column: 1; font-size: 17px; white-space: pre-wrap; }
+  .recap-ligne .rep.vide { color: var(--texte-pale); }
+  .recap-ligne .lien { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+
+  /* Fin */
+  .fin { text-align: center; align-items: center; }
+  .fin .duo { gap: 28px; margin-bottom: 64px; }
+  .fin .duo .kikina { height: 22px; }
+  .fin .duo .client { height: 34px; }
+  .fin h2 { font-weight: 300; font-size: clamp(38px, 7vw, 60px); margin: 0 0 20px; letter-spacing: -.015em; }
+  .fin p { color: var(--texte-doux); max-width: 46ch; margin: 0 auto; }
+  .fin .actions { justify-content: center; }
+
+  footer { max-width: 1080px; width: 100%; margin: 0 auto; padding: 20px 28px 28px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--texte-pale); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   footer a { color: inherit; text-decoration: none; }
 
-  @media (max-width: 520px) {
-    .page { padding: 28px 20px 96px; }
-    header { margin-bottom: 72px; }
-    h1 { margin-bottom: 64px; }
-    button, .fin a.bouton { width: 100%; text-align: center; }
+  @media (max-width: 560px) {
+    .barre-int { padding: 16px 20px 14px; }
+    .progression { padding: 0 20px; }
+    .duo .kikina { height: 13px; }
+    .duo .client { height: 18px; }
+    .scene { padding: 40px 20px 48px; justify-content: flex-start; }
+    .accueil { padding-top: 56px; }
+    .accueil .duo { margin-bottom: 52px; }
+    .accueil .duo .kikina { height: 21px; }
+    .accueil .duo .client { height: 32px; }
+    .tuile { padding: 17px 18px; font-size: 16px; }
+    .bouton { width: 100%; justify-content: center; }
+    .aide { display: none; }
+    footer { padding: 16px 20px 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .entre, .onde i { animation: none; }
   }
 </style>
 </head>
 <body>
-<div class="page">
-  <header>
-    <div class="logo">Kikina</div>
-    <div class="tag" id="tag"></div>
-  </header>
-
-  <main id="app">
-    <p class="note">Chargement…</p>
-  </main>
-
-  <footer>
-    <span>Composé avec des neuroscientifiques</span>
-    <a href="https://kikina.fr" target="_blank" rel="noopener">kikina.fr</a>
-  </footer>
+<div class="barre cachee" id="barre">
+  <div class="barre-int">
+    <div class="duo" id="duo-barre"></div>
+    <div class="compteur" id="compteur"></div>
+  </div>
+  <div class="progression" id="progression"></div>
 </div>
+
+<main id="app"><div class="scene"><p class="aide">Chargement</p></div></main>
+
+<footer>
+  <span>Composé avec des neuroscientifiques</span>
+  <a href="https://kikina.fr" target="_blank" rel="noopener">kikina.fr</a>
+</footer>
 
 <script src="config.js"></script>
 <script>
@@ -110,191 +180,281 @@
   const app = document.getElementById("app");
   const params = new URLSearchParams(location.search);
   const id = (params.get("q") || "").toLowerCase().replace(/[^a-z0-9-]/g, "");
+  const CONTACT = '<a style="color:inherit" href="mailto:bianca@kikinastudio.com">bianca@kikinastudio.com</a>';
 
-  if (!id) { app.innerHTML = '<p class="intro">Ce lien est incomplet. Écrivez-nous à <a style="color:inherit" href="mailto:bianca@kikinastudio.com">bianca@kikinastudio.com</a>.</p>'; return; }
-
+  if (!id) return message("Ce lien est incomplet. Écrivez-nous à " + CONTACT + ".");
   const s = document.createElement("script");
   s.src = "questionnaires/" + id + ".js";
   s.onload = () => window.QUESTIONNAIRE ? demarrer(window.QUESTIONNAIRE) : introuvable();
   s.onerror = introuvable;
   document.body.appendChild(s);
 
-  function introuvable() {
-    app.innerHTML = '<p class="intro">Ce questionnaire n\'existe plus ou le lien est incorrect. Écrivez-nous à <a style="color:inherit" href="mailto:bianca@kikinastudio.com">bianca@kikinastudio.com</a>.</p>';
-  }
+  function introuvable() { message("Ce questionnaire n'existe plus ou le lien est incorrect. Écrivez-nous à " + CONTACT + "."); }
+  function message(html) { app.innerHTML = '<div class="scene"><p style="max-width:46ch;color:var(--texte-doux)">' + html + "</p></div>"; }
 
   function el(tag, attrs, ...enfants) {
     const n = document.createElement(tag);
     for (const k in attrs || {}) {
       if (k === "class") n.className = attrs[k];
       else if (k === "text") n.textContent = attrs[k];
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), attrs[k]);
       else n.setAttribute(k, attrs[k]);
     }
-    enfants.flat().forEach(c => c && n.appendChild(typeof c === "string" ? document.createTextNode(c) : c));
+    enfants.flat().forEach(c => c != null && c !== false && n.appendChild(typeof c === "string" ? document.createTextNode(c) : c));
     return n;
   }
 
   function demarrer(Q) {
     const CFG = window.KIKINA_CONFIG || {};
-    const cleBrouillon = "kikina-questionnaire-" + Q.id;
+    const cle = "kikina-questionnaire-" + Q.id;
+    const barre = document.getElementById("barre");
+    const compteur = document.getElementById("compteur");
+    const progression = document.getElementById("progression");
     document.title = "Kikina · " + Q.client;
-    document.getElementById("tag").textContent = Q.client;
 
-    const questions = Q.sections.flatMap(sec => sec.questions);
-    let brouillon = {};
-    try { brouillon = JSON.parse(localStorage.getItem(cleBrouillon) || "{}"); } catch (e) {}
+    // Questions à plat, chacune avec sa section.
+    const toutes = [];
+    Q.sections.forEach((sec, i) => sec.questions.forEach(q => toutes.push(Object.assign({}, q, { _sec: i }))));
 
-    app.innerHTML = "";
-    app.appendChild(el("h1", { text: Q.titre || Q.bonjour || "Quelques questions" }));
-    if (Q.intro) app.appendChild(el("p", { class: "intro", text: Q.intro }));
+    let etat = { r: {}, pos: -1, recapApres: false };
+    try { Object.assign(etat, JSON.parse(localStorage.getItem(cle) || "{}")); } catch (e) {}
+    const R = etat.r;
+    toutes.forEach(q => { if (!(q.id in R)) R[q.id] = q.type === "multi" ? { choix: [], autre: "" } : ""; });
 
-    const form = el("form", { novalidate: "" });
-    Q.sections.forEach((sec, i) => {
-      const bloc = el("section", { class: "section" },
-        el("div", { class: "section-titre" },
-          el("span", { class: "num", text: String(i + 1).padStart(2, "0") }),
-          el("h2", { text: sec.titre })));
-      sec.questions.forEach(q => bloc.appendChild(champ(q)));
-      form.appendChild(bloc);
-    });
-
-    const erreur = el("div", { class: "erreur", role: "alert" });
-    const bouton = el("button", { type: "submit", text: "Envoyer" });
-    form.appendChild(el("div", { class: "envoi" }, bouton,
-      erreur));
-    app.appendChild(form);
-
-    function champ(q) {
-      const wrap = el("div", { class: "q", "data-id": q.id });
-      const lid = "q-" + q.id;
-      const label = el(q.type === "choix" || q.type === "multi" ? "div" : "label", { class: "q-label", for: lid, id: lid + "-label" }, q.label);
-      if (q.requis) label.appendChild(el("span", { class: "requis", text: " *" }));
-      wrap.appendChild(label);
-      const val = brouillon[q.id];
-
-      if (q.type === "texte" || q.type === "texte-long") {
-        const input = q.type === "texte" ? el("input", { type: "text", id: lid, name: q.id }) : el("textarea", { id: lid, name: q.id });
-        if (q.placeholder) input.placeholder = q.placeholder;
-        if (typeof val === "string") input.value = val;
-        wrap.appendChild(input);
-      } else {
-        const multi = q.type === "multi";
-        const opts = el("div", { class: "options", role: multi ? "group" : "radiogroup", "aria-labelledby": lid + "-label" });
-        const choisies = multi ? (val && val.choix) || [] : [val];
-        q.options.forEach(o => {
-          const input = el("input", { type: multi ? "checkbox" : "radio", name: q.id, value: o });
-          if (choisies.includes(o)) input.checked = true;
-          opts.appendChild(el("label", { class: "opt" }, input, el("span", { text: o })));
-        });
-        wrap.appendChild(opts);
-        if (q.autre) {
-          const autre = el("input", { type: "text", class: "autre-champ", name: q.id + "__autre", placeholder: "Autre, précisez", "aria-label": "Autre objectif" });
-          if (val && val.autre) autre.value = val.autre;
-          wrap.appendChild(autre);
-        }
-        if (!multi) {
-          // Un second clic sur une option déjà cochée la décoche.
-          opts.addEventListener("click", e => {
-            const r = e.target.closest("input[type=radio]");
-            if (!r) return;
-            if (r.dataset.etait === "1") { r.checked = false; r.dataset.etait = ""; form.dispatchEvent(new Event("input")); }
-            else opts.querySelectorAll("input").forEach(x => x.dataset.etait = x === r ? "1" : "");
-          });
-          opts.querySelectorAll("input:checked").forEach(x => x.dataset.etait = "1");
-        }
-      }
-      return wrap;
+    function sauver() { try { localStorage.setItem(cle, JSON.stringify(etat)); } catch (e) {} }
+    function visible(q) { return !q.siReponse || Object.entries(q.siReponse).every(([k, v]) => v.includes(R[k])); }
+    function visibles() { return toutes.filter(visible); }
+    function texte(q) {
+      const v = R[q.id];
+      if (q.type === "multi") return [...v.choix, v.autre ? v.autre : ""].filter(Boolean).join(", ");
+      return (v || "").trim();
     }
 
-    function lire() {
-      const fd = new FormData(form), r = {};
-      questions.forEach(q => {
-        if (q.type === "multi") r[q.id] = { choix: fd.getAll(q.id), autre: (fd.get(q.id + "__autre") || "").trim() };
-        else r[q.id] = (fd.get(q.id) || "").toString().trim();
+    function logos(classe) {
+      const d = el("div", { class: "duo" + (classe ? " " + classe : "") },
+        el("img", { class: "kikina", src: "logos/kikina.svg", alt: "Kikina" }));
+      if (Q.logoClient) d.append(el("span", { class: "croix", "aria-hidden": "true" }), el("img", { class: "client", src: Q.logoClient, alt: Q.client }));
+      return d;
+    }
+    document.getElementById("duo-barre").replaceWith(Object.assign(logos(), { id: "duo-barre" }));
+
+    function scene(classe, ...enfants) {
+      app.innerHTML = "";
+      const sc = el("div", { class: "scene entre " + (classe || "") }, ...enfants);
+      app.appendChild(sc);
+      window.scrollTo(0, 0);
+      return sc;
+    }
+
+    function majBarre(index) {
+      const v = visibles();
+      if (index < 0) { barre.classList.add("cachee"); return; }
+      barre.classList.remove("cachee");
+      compteur.textContent = index >= v.length ? "Récapitulatif" : (index + 1) + " / " + v.length;
+      progression.innerHTML = "";
+      v.forEach((q, i) => {
+        const seg = el("span", { class: (i < index || index >= v.length ? "fait" : "") + (i > 0 && v[i - 1]._sec !== q._sec ? " coupure" : "") });
+        progression.appendChild(seg);
       });
-      return r;
     }
 
-    function visible(q, r) {
-      if (!q.siReponse) return true;
-      return Object.entries(q.siReponse).every(([k, vals]) => vals.includes(r[k]));
+    // Accueil
+    function accueil() {
+      etat.pos = -1; sauver(); majBarre(-1);
+      const onde = el("div", { class: "onde", "aria-hidden": "true" });
+      [10, 18, 28, 16, 34, 22, 40, 26, 14, 30, 20, 36, 18, 24, 12].forEach((h, i) =>
+        onde.appendChild(el("i", { style: "height:" + h + "px;animation-delay:" + (i * -0.17).toFixed(2) + "s" })));
+      const etapes = el("ol", { class: "etapes" });
+      Q.sections.forEach((sec, i) => {
+        const n = toutes.filter(q => q._sec === i).length;
+        etapes.appendChild(el("li", {}, el("span", { class: "num", text: String(i + 1).padStart(2, "0") }), sec.titre,
+          el("span", { class: "nb", text: n + " question" + (n > 1 ? "s" : "") })));
+      });
+      const dejaCommence = toutes.some(q => texte(q));
+      scene("accueil",
+        logos(),
+        el("h1", { text: Q.titre || Q.client }),
+        el("p", { class: "format", text: toutes.length + " questions courtes" + (Q.duree ? " · " + Q.duree : "") }),
+        onde,
+        etapes,
+        el("div", { class: "actions", style: "margin-top:0;justify-content:center" },
+          el("button", { class: "bouton", type: "button", onclick: () => question(0) }, dejaCommence ? "Reprendre" : "Commencer", el("span", { text: "→", "aria-hidden": "true" }))));
     }
 
-    function maj() {
-      const r = lire();
-      questions.forEach(q => { form.querySelector('[data-id="' + q.id + '"]').hidden = !visible(q, r); });
-      try { localStorage.setItem(cleBrouillon, JSON.stringify(r)); } catch (e) {}
-    }
-    form.addEventListener("input", maj);
-    form.addEventListener("change", maj);
-    maj();
+    // Une question
+    function question(index) {
+      const v = visibles();
+      if (index >= v.length) return recap();
+      if (index < 0) return accueil();
+      etat.pos = index; sauver(); majBarre(index);
+      const q = v[index];
+      const sec = Q.sections[q._sec];
+      const erreur = el("div", { class: "erreur", role: "alert" });
+      const suivant = el("button", { class: "bouton", type: "button" });
+      const majSuivant = () => {
+        const rempli = !!texte(q);
+        suivant.textContent = "";
+        suivant.append(!rempli && !q.requis ? "Passer" : (etat.recapApres ? "Valider" : "Continuer"), el("span", { text: "→", "aria-hidden": "true" }));
+      };
+      const avancer = () => {
+        if (q.requis && !texte(q)) { erreur.textContent = "Cette réponse est nécessaire pour continuer."; return; }
+        sauver();
+        if (etat.recapApres) { etat.recapApres = false; return recap(); }
+        // Les questions visibles peuvent changer selon la réponse : on recalcule.
+        const nv = visibles();
+        question(nv.indexOf(q) + 1);
+      };
+      suivant.addEventListener("click", avancer);
 
-    function texteReponse(q, v) {
-      if (q.type === "multi") return [...v.choix, v.autre ? "Autre : " + v.autre : ""].filter(Boolean).join(", ");
-      return v;
-    }
-
-    function recap(r) {
-      return questions.filter(q => visible(q, r)).map(q => {
-        const t = texteReponse(q, r[q.id]);
-        return q.label + "\n" + (t || "(pas de réponse)");
-      }).join("\n\n");
-    }
-
-    form.addEventListener("submit", async e => {
-      e.preventDefault();
-      erreur.textContent = "";
-      const r = lire();
-      const manquante = questions.find(q => q.requis && visible(q, r) && !texteReponse(q, r[q.id]));
-      if (manquante) {
-        erreur.textContent = "Il manque : " + manquante.label.toLowerCase();
-        const n = form.querySelector('[data-id="' + manquante.id + '"] input, [data-id="' + manquante.id + '"] textarea');
-        n && n.focus();
-        return;
+      let champ;
+      if (q.type === "choix" || q.type === "multi") {
+        const multi = q.type === "multi";
+        champ = el("div", { class: "tuiles", role: multi ? "group" : "radiogroup", "aria-label": q.label });
+        const tuiles = q.options.map((o, i) => {
+          const choisie = multi ? R[q.id].choix.includes(o) : R[q.id] === o;
+          const t = el("button", { type: "button", class: "tuile" + (multi ? " multi" : "") + (choisie ? " choisie" : ""), role: multi ? "checkbox" : "radio", "aria-checked": String(choisie) },
+            el("span", { class: "touche", text: String.fromCharCode(65 + i) }), o);
+          t.addEventListener("click", () => choisir(i));
+          return t;
+        });
+        champ.append(...tuiles);
+        function choisir(i) {
+          const o = q.options[i];
+          if (multi) {
+            const c = R[q.id].choix;
+            c.includes(o) ? c.splice(c.indexOf(o), 1) : c.push(o);
+            R[q.id].choix = q.options.filter(x => c.includes(x));
+          } else {
+            R[q.id] = R[q.id] === o ? "" : o;
+          }
+          tuiles.forEach((t, j) => {
+            const on = multi ? R[q.id].choix.includes(q.options[j]) : R[q.id] === q.options[j];
+            t.classList.toggle("choisie", on); t.setAttribute("aria-checked", String(on));
+          });
+          sauver(); majSuivant(); erreur.textContent = "";
+          if (!multi && R[q.id]) setTimeout(avancer, 380);
+        }
+        if (q.autre) {
+          const autre = el("input", { class: "saisie", type: "text", placeholder: "Autre, précisez", "aria-label": "Autre" });
+          autre.value = R[q.id].autre || "";
+          autre.addEventListener("input", () => { R[q.id].autre = autre.value; sauver(); majSuivant(); });
+          autre.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); avancer(); } e.stopPropagation(); });
+          champ.appendChild(el("div", { class: "autre" }, autre));
+        }
+        clavier = e => {
+          if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+          const i = e.key.toUpperCase().charCodeAt(0) - 65;
+          if (e.key.length === 1 && i >= 0 && i < q.options.length) { e.preventDefault(); choisir(i); }
+          else if (e.key === "Enter" && multi) { e.preventDefault(); avancer(); }
+        };
+      } else {
+        const long = q.type === "texte-long";
+        champ = el(long ? "textarea" : "input", { class: "saisie", "aria-label": q.label });
+        if (!long) champ.type = "text";
+        if (q.placeholder) champ.placeholder = q.placeholder;
+        champ.value = R[q.id] || "";
+        champ.addEventListener("input", () => { R[q.id] = champ.value; sauver(); majSuivant(); erreur.textContent = ""; });
+        champ.addEventListener("keydown", e => {
+          if (e.key === "Enter" && (!long || e.metaKey || e.ctrlKey)) { e.preventDefault(); avancer(); }
+        });
+        clavier = null;
       }
-      const sujet = "Questionnaire " + Q.client + " · réponses de " + (r.nom || "un client");
-      if (!CFG.envoiAutomatique) return finir(false, sujet, recap(r));
+      majSuivant();
 
-      bouton.disabled = true; bouton.textContent = "Envoi";
+      const retour = el("button", { class: "lien", type: "button", text: "← Retour", onclick: () => { etat.recapApres = false; question(index - 1); } });
+      const aide = q.type === "choix" ? "Touches A, B, C pour choisir"
+        : q.type === "multi" ? "Plusieurs réponses possibles"
+        : q.type === "texte-long" ? "⌘ + Entrée pour continuer" : "Entrée pour continuer";
+
+      scene("question",
+        el("p", { class: "surtitre" }, el("span", { class: "num", text: String(q._sec + 1).padStart(2, "0") }), sec.titre),
+        el("h2", { class: q.label.length > 90 ? "long" : "" }, q.label, q.requis ? el("span", { class: "requis", text: " *" }) : null),
+        champ,
+        erreur,
+        el("div", { class: "actions" }, suivant, retour, el("span", { class: "aide", text: aide })));
+      const focus = (q.type === "texte" || q.type === "texte-long") ? app.querySelector(".saisie") : null;
+      if (focus && window.matchMedia("(min-width: 561px)").matches) focus.focus({ preventScroll: true });
+    }
+
+    let clavier = null;
+    document.addEventListener("keydown", e => { if (clavier) clavier(e); });
+
+    // Récapitulatif
+    function recap() {
+      const v = visibles();
+      etat.pos = v.length; sauver(); majBarre(v.length); clavier = null;
+      const blocs = Q.sections.map((sec, i) => {
+        const qs = v.filter(q => q._sec === i);
+        if (!qs.length) return null;
+        return el("div", { class: "recap-section" }, el("h3", { text: String(i + 1).padStart(2, "0") + " · " + sec.titre }),
+          qs.map(q => {
+            const t = texte(q);
+            return el("div", { class: "recap-ligne" },
+              el("span", { class: "ql", text: q.label }),
+              el("span", { class: "rep" + (t ? "" : " vide"), text: t || "Pas de réponse" }),
+              el("button", { class: "lien", type: "button", text: "Modifier", onclick: () => { etat.recapApres = true; question(visibles().indexOf(q)); } }));
+          }));
+      });
+      const erreur = el("div", { class: "erreur", role: "alert" });
+      const envoyer = el("button", { class: "bouton", type: "button" }, "Envoyer", el("span", { text: "→", "aria-hidden": "true" }));
+      envoyer.addEventListener("click", () => envoi(envoyer, erreur));
+      scene("recap",
+        el("p", { class: "surtitre", text: "Avant d'envoyer" }),
+        el("h2", { text: "Vos réponses" }),
+        blocs,
+        erreur,
+        el("div", { class: "actions" }, envoyer, el("button", { class: "lien", type: "button", text: "← Retour", onclick: () => question(v.length - 1) })));
+    }
+
+    async function envoi(bouton, erreur) {
+      const v = visibles();
+      const manquante = v.find(q => q.requis && !texte(q));
+      if (manquante) { etat.recapApres = true; return question(v.indexOf(manquante)); }
+      const nom = texte(toutes.find(q => q.id === "nom") || {}) || "un client";
+      const sujet = "Questionnaire " + Q.client + " · réponses de " + nom;
+      const corpsTexte = v.map(q => q.label + "\n" + (texte(q) || "(pas de réponse)")).join("\n\n");
+      if (!CFG.envoiAutomatique) return secours(sujet, corpsTexte);
+      bouton.disabled = true;
       const corps = { _subject: sujet, _template: "box", _captcha: "false", Questionnaire: Q.client };
-      questions.filter(q => visible(q, r)).forEach(q => { corps[q.label] = texteReponse(q, r[q.id]) || "(pas de réponse)"; });
+      v.forEach(q => { corps[q.label] = texte(q) || "(pas de réponse)"; });
       try {
         const rep = await fetch(CFG.envoiAutomatique, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Accept": "application/json" },
-          body: JSON.stringify(corps)
+          method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(corps)
         });
         const json = await rep.json().catch(() => ({}));
         if (!rep.ok || json.success === false || json.success === "false") throw new Error("envoi");
-        finir(true);
+        try { localStorage.removeItem(cle); } catch (e) {}
+        fin();
       } catch (err) {
-        finir(false, sujet, recap(r));
+        secours(sujet, corpsTexte);
       }
-    });
-
-    function finir(envoye, sujet, texte) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      if (envoye) {
-        try { localStorage.removeItem(cleBrouillon); } catch (e) {}
-        app.innerHTML = "";
-        app.appendChild(el("h1", { text: "Merci." }));
-        if (Q.merci) app.appendChild(el("div", { class: "fin" }, el("p", { text: Q.merci })));
-        return;
-      }
-      const dest = CFG.destinataire || "bianca@kikinastudio.com";
-      const mailto = "mailto:" + dest + "?subject=" + encodeURIComponent(sujet) + "&body=" + encodeURIComponent(texte);
-      const copier = el("button", { type: "button", class: "secondaire", text: "Copier mes réponses" });
-      copier.addEventListener("click", async () => {
-        try { await navigator.clipboard.writeText(texte); copier.textContent = "Copié"; } catch (e) { copier.textContent = "Copie impossible"; }
-      });
-      const retour = el("button", { type: "button", class: "secondaire", text: "Modifier" });
-      retour.addEventListener("click", () => demarrer(Q));
-      app.innerHTML = "";
-      app.appendChild(el("h1", { text: "Dernière étape." }));
-      app.appendChild(el("div", { class: "fin" },
-        el("p", { text: "Vos réponses sont prêtes. Le bouton ci-dessous ouvre un mail déjà rempli vers " + dest + ", il suffit de l'envoyer." }),
-        el("div", { class: "actions" }, el("a", { class: "bouton", href: mailto, text: "Ouvrir le mail" }), copier, retour)));
     }
+
+    function fin() {
+      majBarre(-1); clavier = null;
+      scene("fin", logos(), el("h2", { text: "Merci." }), Q.merci ? el("p", { text: Q.merci }) : null);
+    }
+
+    function secours(sujet, corpsTexte) {
+      majBarre(-1); clavier = null;
+      const dest = CFG.destinataire || "bianca@kikinastudio.com";
+      const mailto = "mailto:" + dest + "?subject=" + encodeURIComponent(sujet) + "&body=" + encodeURIComponent(corpsTexte);
+      const copier = el("button", { class: "bouton leger", type: "button", text: "Copier mes réponses" });
+      copier.addEventListener("click", async () => {
+        try { await navigator.clipboard.writeText(corpsTexte); copier.textContent = "Copié"; } catch (e) { copier.textContent = "Copie impossible"; }
+      });
+      scene("fin", logos(),
+        el("h2", { text: "Dernière étape." }),
+        el("p", { text: "Vos réponses sont prêtes. Ce bouton ouvre un mail déjà rempli vers " + dest + ", il suffit de l'envoyer." }),
+        el("div", { class: "actions" }, el("a", { class: "bouton", href: mailto, text: "Ouvrir le mail" }), copier,
+          el("button", { class: "lien", type: "button", text: "← Retour", onclick: recap })));
+    }
+
+    // Reprise là où la personne s'était arrêtée.
+    const v0 = visibles();
+    if (etat.pos >= v0.length) recap();
+    else if (etat.pos >= 0) question(etat.pos);
+    else accueil();
   }
 })();
 </script>

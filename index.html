@@ -326,14 +326,39 @@
           el("span", { class: "nb", text: n + " question" + (n > 1 ? "s" : "") })));
       });
       const dejaCommence = toutes.some(q => texte(q));
+      let envoyeLe = null;
+      try { envoyeLe = localStorage.getItem(cle + "-envoye"); } catch (e) {}
+      // Reprendre : première question sans réponse, ou le récapitulatif si tout est rempli.
+      const reprendre = () => {
+        const v = visibles();
+        const i = v.findIndex(q => !texte(q));
+        i < 0 ? recap() : question(i);
+      };
+      const recommencer = () => {
+        try { localStorage.removeItem(cle); localStorage.removeItem(cle + "-envoye"); } catch (e) {}
+        location.reload();
+      };
+      let actions;
+      if (dejaCommence) {
+        actions = el("div", { class: "actions", style: "margin-top:0;justify-content:center" },
+          el("button", { class: "bouton", type: "button", onclick: reprendre }, "Reprendre", el("span", { text: "→", "aria-hidden": "true" })),
+          el("button", { class: "lien", type: "button", text: "Recommencer", onclick: recommencer }));
+      } else if (envoyeLe) {
+        actions = el("div", { style: "text-align:center" },
+          el("p", { class: "format", style: "margin-bottom:28px", text: "Vos réponses ont bien été envoyées. Merci." }),
+          el("div", { class: "actions", style: "margin-top:0;justify-content:center" },
+            el("button", { class: "bouton leger", type: "button", onclick: recommencer }, "Répondre à nouveau")));
+      } else {
+        actions = el("div", { class: "actions", style: "margin-top:0;justify-content:center" },
+          el("button", { class: "bouton", type: "button", onclick: () => question(0) }, "Commencer", el("span", { text: "→", "aria-hidden": "true" })));
+      }
       scene("accueil",
         logos(),
         el("h1", { text: Q.titre || Q.client }),
         el("p", { class: "format", text: toutes.length + " questions courtes" + (Q.duree ? " · " + Q.duree : "") }),
         onde,
         etapes,
-        el("div", { class: "actions", style: "margin-top:0;justify-content:center" },
-          el("button", { class: "bouton", type: "button", onclick: () => question(0) }, dejaCommence ? "Reprendre" : "Commencer", el("span", { text: "→", "aria-hidden": "true" }))));
+        actions);
     }
 
     // Une question
@@ -483,7 +508,7 @@
         });
         const json = await rep.json().catch(() => ({}));
         if (!rep.ok || json.success === false || json.success === "false") throw new Error("envoi");
-        try { localStorage.removeItem(cle); } catch (e) {}
+        try { localStorage.removeItem(cle); localStorage.setItem(cle + "-envoye", new Date().toISOString()); } catch (e) {}
         fin();
       } catch (err) {
         secours(sujet, corpsTexte);
@@ -510,11 +535,8 @@
           el("button", { class: "lien", type: "button", text: "← Retour", onclick: recap })));
     }
 
-    // Reprise là où la personne s'était arrêtée.
-    const v0 = visibles();
-    if (etat.pos >= v0.length) recap();
-    else if (etat.pos >= 0) question(etat.pos);
-    else accueil();
+    // À chaque ouverture : l'accueil. Il propose de reprendre si des réponses sont en cours.
+    accueil();
   }
 })();
 </script>

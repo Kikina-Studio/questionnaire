@@ -23,7 +23,7 @@ Plus simple : demander à Claude « crée un questionnaire pour [client] avec ce
 ## Réception des réponses
 - Si `envoiAutomatique` est rempli dans `config.js`, les réponses arrivent par mail sans action du client.
 - Sinon (ou si l'envoi échoue), le client voit un bouton qui ouvre un mail déjà rempli vers Bianca, plus un bouton « Copier mes réponses ».
-- Le client peut fermer la page et revenir : ses réponses restent sur son appareil tant qu'elles ne sont pas envoyées.
+- À chaque ouverture, le client arrive sur l'accueil. S'il avait commencé : « Reprendre » (première question sans réponse, réponses conservées) ou « Recommencer ». S'il a déjà envoyé : « Vos réponses ont bien été envoyées. Merci. » + « Répondre à nouveau ». Les réponses restent sur son appareil tant qu'elles ne sont pas envoyées.
 
 ## Tester en local
 Dans Claude Code : lancer la prévisualisation « questionnaire » (`.claude/launch.json`), puis ouvrir `http://localhost:8765/?q=lvmh-dior-spa`.

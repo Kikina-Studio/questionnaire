@@ -27,14 +27,24 @@
   body {
     margin: 0; min-height: 100vh; min-height: 100dvh; background: var(--fond); color: var(--texte);
     font-family: var(--police); font-weight: 300; font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased;
-    display: flex; flex-direction: column;
   }
+
+  /* Cadre : photo à gauche, parcours à droite */
+  .cadre { display: flex; min-height: 100vh; min-height: 100dvh; }
+  .visuel { position: sticky; top: 0; flex: none; width: 44%; height: 100vh; height: 100dvh; overflow: hidden; background: #e9e4da; }
+  .visuel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.06); transition: opacity 1.4s var(--courbe), transform 9s ease-out; }
+  .visuel img.on { opacity: 1; transform: scale(1); }
+  .visuel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(17,17,17,0) 60%, rgba(17,17,17,.18)); pointer-events: none; }
+  .sans-visuel .visuel { display: none; }
+  .colonne { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
   button { font: inherit; }
   img { display: block; }
 
   /* Barre du haut */
   .barre { position: sticky; top: 0; z-index: 5; background: rgba(250, 248, 244, .92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-  .barre-int { max-width: 1080px; margin: 0 auto; padding: 22px 28px 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .barre-int { padding: 24px 40px 18px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; }
+  .barre-int .duo { grid-column: 2; }
+  .barre-int .compteur { grid-column: 3; justify-self: end; }
   .duo { display: flex; align-items: center; gap: 16px; }
   .duo .kikina { height: 15px; width: auto; }
   .duo .client { height: 22px; width: auto; }
@@ -43,7 +53,7 @@
   .duo .croix::before { transform: rotate(45deg); }
   .duo .croix::after { transform: rotate(-45deg); }
   .compteur { font-size: 12px; letter-spacing: .14em; color: var(--texte-doux); font-variant-numeric: tabular-nums; }
-  .progression { max-width: 1080px; margin: 0 auto; padding: 0 28px; display: flex; gap: 4px; height: 2px; }
+  .progression { padding: 0 40px; display: flex; gap: 4px; height: 2px; }
   .progression span { flex: 1; background: var(--ligne); transition: background .5s var(--courbe); }
   .progression span.fait { background: var(--texte); }
   .progression span.coupure { margin-left: 10px; }
@@ -51,7 +61,7 @@
 
   /* Scène */
   main { flex: 1; display: flex; }
-  .scene { flex: 1; width: 100%; max-width: 760px; margin: 0 auto; padding: 8vh 28px 64px; display: flex; flex-direction: column; justify-content: center; }
+  .scene { flex: 1; width: 100%; max-width: 680px; margin: 0 auto; padding: 7vh 40px 56px; display: flex; flex-direction: column; justify-content: center; }
   .entre { animation: entre .6s var(--courbe) both; }
   @keyframes entre { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
@@ -135,16 +145,25 @@
   .fin p { color: var(--texte-doux); max-width: 46ch; margin: 0 auto; }
   .fin .actions { justify-content: center; }
 
-  footer { max-width: 1080px; width: 100%; margin: 0 auto; padding: 20px 28px 28px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--texte-pale); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer { width: 100%; padding: 20px 40px 28px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--texte-pale); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   footer a { color: inherit; text-decoration: none; }
 
+  @media (max-width: 900px) {
+    .cadre { flex-direction: column; }
+    .visuel { position: relative; width: 100%; height: 38vh; transition: height .8s var(--courbe); }
+    body.en-question .visuel { height: 128px; }
+    .scene { padding: 48px 28px 48px; justify-content: flex-start; }
+    .barre-int { padding: 18px 28px 14px; }
+    .progression { padding: 0 28px; }
+    footer { padding: 20px 28px 28px; }
+  }
   @media (max-width: 560px) {
     .barre-int { padding: 16px 20px 14px; }
     .progression { padding: 0 20px; }
     .duo .kikina { height: 13px; }
     .duo .client { height: 18px; }
     .scene { padding: 40px 20px 48px; justify-content: flex-start; }
-    .accueil { padding-top: 56px; }
+    .accueil { padding-top: 40px; }
     .accueil .duo { margin-bottom: 52px; }
     .accueil .duo .kikina { height: 21px; }
     .accueil .duo .client { height: 32px; }
@@ -159,6 +178,9 @@
 </style>
 </head>
 <body>
+<div class="cadre sans-visuel" id="cadre">
+<aside class="visuel" aria-hidden="true"><img alt="" id="img-a"><img alt="" id="img-b"></aside>
+<div class="colonne">
 <div class="barre cachee" id="barre">
   <div class="barre-int">
     <div class="duo" id="duo-barre"></div>
@@ -173,6 +195,8 @@
   <span>Composé avec des neuroscientifiques</span>
   <a href="https://kikina.fr" target="_blank" rel="noopener">kikina.fr</a>
 </footer>
+</div>
+</div>
 
 <script src="config.js"></script>
 <script>
@@ -238,6 +262,25 @@
     }
     document.getElementById("duo-barre").replaceWith(Object.assign(logos(), { id: "duo-barre" }));
 
+    // Photos : fondu enchaîné entre deux calques.
+    const IM = Q.images || {};
+    const aDesImages = !!(IM.accueil || Q.sections.some(sec => sec.image));
+    if (aDesImages) document.getElementById("cadre").classList.remove("sans-visuel");
+    const calques = [document.getElementById("img-a"), document.getElementById("img-b")];
+    let calque = 0, imageCourante = "";
+    function visuel(src, enQuestion) {
+      document.body.classList.toggle("en-question", !!enQuestion);
+      src = src || IM.accueil;
+      if (!aDesImages || !src || src === imageCourante) return;
+      imageCourante = src;
+      const suivant = calques[1 - calque], actuel = calques[calque];
+      suivant.onload = () => { suivant.classList.add("on"); actuel.classList.remove("on"); };
+      suivant.src = src;
+      calque = 1 - calque;
+    }
+    // Précharge les photos pour des transitions sans attente.
+    [IM.accueil, IM.fin, ...Q.sections.map(sec => sec.image)].filter(Boolean).forEach(src => { new Image().src = src; });
+
     function scene(classe, ...enfants) {
       app.innerHTML = "";
       const sc = el("div", { class: "scene entre " + (classe || "") }, ...enfants);
@@ -260,7 +303,7 @@
 
     // Accueil
     function accueil() {
-      etat.pos = -1; sauver(); majBarre(-1);
+      etat.pos = -1; sauver(); majBarre(-1); visuel(IM.accueil);
       const onde = el("div", { class: "onde", "aria-hidden": "true" });
       [10, 18, 28, 16, 34, 22, 40, 26, 14, 30, 20, 36, 18, 24, 12].forEach((h, i) =>
         onde.appendChild(el("i", { style: "height:" + h + "px;animation-delay:" + (i * -0.17).toFixed(2) + "s" })));
@@ -289,6 +332,7 @@
       etat.pos = index; sauver(); majBarre(index);
       const q = v[index];
       const sec = Q.sections[q._sec];
+      visuel(sec.image, true);
       const erreur = el("div", { class: "erreur", role: "alert" });
       const suivant = el("button", { class: "bouton", type: "button" });
       const majSuivant = () => {
@@ -382,7 +426,7 @@
     // Récapitulatif
     function recap() {
       const v = visibles();
-      etat.pos = v.length; sauver(); majBarre(v.length); clavier = null;
+      etat.pos = v.length; sauver(); majBarre(v.length); clavier = null; visuel(IM.fin, true);
       const blocs = Q.sections.map((sec, i) => {
         const qs = v.filter(q => q._sec === i);
         if (!qs.length) return null;
@@ -410,8 +454,7 @@
       const v = visibles();
       const manquante = v.find(q => q.requis && !texte(q));
       if (manquante) { etat.recapApres = true; return question(v.indexOf(manquante)); }
-      const nom = texte(toutes.find(q => q.id === "nom") || {}) || "un client";
-      const sujet = "Questionnaire " + Q.client + " · réponses de " + nom;
+      const sujet = "Questionnaire " + Q.client + " · nouvelles réponses";
       const corpsTexte = v.map(q => q.label + "\n" + (texte(q) || "(pas de réponse)")).join("\n\n");
       if (!CFG.envoiAutomatique) return secours(sujet, corpsTexte);
       bouton.disabled = true;
@@ -431,12 +474,12 @@
     }
 
     function fin() {
-      majBarre(-1); clavier = null;
+      majBarre(-1); clavier = null; visuel(IM.fin);
       scene("fin", logos(), el("h2", { text: "Merci." }), Q.merci ? el("p", { text: Q.merci }) : null);
     }
 
     function secours(sujet, corpsTexte) {
-      majBarre(-1); clavier = null;
+      majBarre(-1); clavier = null; visuel(IM.fin);
       const dest = CFG.destinataire || "bianca@kikinastudio.com";
       const mailto = "mailto:" + dest + "?subject=" + encodeURIComponent(sujet) + "&body=" + encodeURIComponent(corpsTexte);
       const copier = el("button", { class: "bouton leger", type: "button", text: "Copier mes réponses" });

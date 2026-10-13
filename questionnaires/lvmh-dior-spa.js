@@ -7,11 +7,17 @@ window.QUESTIONNAIRE = {
   // Le contexte est dans le mail : la page ne montre que les questions.
   titre: "Spa Dior",
   logoClient: "logos/dior.svg",
-  duree: "3 minutes",
+  duree: "2 minutes",
+  // Photos Unsplash (licence libre), stockées dans images/spa/.
+  images: {
+    accueil: "images/spa/accueil-piscine.jpg",
+    fin: "images/spa/fin-lin.jpg"
+  },
   merci: "Merci, vos réponses sont bien arrivées.",
   sections: [
     {
       titre: "Le test à l'Académie",
+      image: "images/spa/soin-cabine.jpg",
       questions: [
         {
           id: "lieu_test",
@@ -57,6 +63,7 @@ window.QUESTIONNAIRE = {
     },
     {
       titre: "L'expérience sommeil",
+      image: "images/spa/sommeil-lit.jpg",
       questions: [
         {
           id: "service_chambre",
@@ -72,17 +79,6 @@ window.QUESTIONNAIRE = {
             "Téléphone et écouteurs de l'invité",
             "Les deux, à discuter"
           ]
-        }
-      ]
-    },
-    {
-      titre: "Vos coordonnées",
-      questions: [
-        {
-          id: "nom",
-          label: "Votre prénom et nom",
-          type: "texte",
-          requis: true
         }
       ]
     }

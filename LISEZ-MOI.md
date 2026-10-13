@@ -22,6 +22,7 @@ Créé le 13/10/2026 pour Andréa Lopes (LVMH Recherche / Spa Dior). Sert pour t
 Plus simple : demander à Claude « crée un questionnaire pour [client] avec ces questions ».
 
 ## Réception des réponses
+- Plusieurs personnes peuvent répondre (chacune sur son appareil) : un mail par envoi. Un champ « Votre prénom » facultatif en bas du récapitulatif met le prénom dans l'objet du mail (« Questionnaire Spa Dior · réponses d'Aude »).
 - Si `envoiAutomatique` est rempli dans `config.js`, les réponses arrivent par mail sans action du client.
 - Sinon (ou si l'envoi échoue), le client voit un bouton qui ouvre un mail déjà rempli vers Bianca, plus un bouton « Copier mes réponses ».
 - À chaque ouverture, le client arrive sur l'accueil. S'il avait commencé : « Reprendre » (première question sans réponse, réponses conservées) ou « Recommencer ». S'il a déjà envoyé : « Vos réponses ont bien été envoyées. Merci. » + « Répondre à nouveau ». Les réponses restent sur son appareil tant qu'elles ne sont pas envoyées.

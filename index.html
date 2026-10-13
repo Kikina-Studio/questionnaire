@@ -141,6 +141,9 @@
   .recap-ligne .rep { grid-column: 1; font-size: 17px; white-space: pre-wrap; }
   .recap-ligne .rep.vide { color: var(--texte-pale); }
   .recap-ligne .lien { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+  .prenom { margin: 8px 0 0; max-width: 360px; }
+  .prenom label { display: block; font-size: 12px; font-weight: 400; letter-spacing: .16em; text-transform: uppercase; color: var(--texte-doux); margin-bottom: 6px; }
+  .prenom .saisie { font-size: 20px; padding: 6px 0 10px; }
 
   /* Fin */
   .fin { text-align: center; align-items: center; }
@@ -487,10 +490,16 @@
       const erreur = el("div", { class: "erreur", role: "alert" });
       const envoyer = el("button", { class: "bouton", type: "button" }, "Envoyer", el("span", { text: "→", "aria-hidden": "true" }));
       envoyer.addEventListener("click", () => envoi(envoyer, erreur));
+      // Prénom facultatif : pour savoir qui a répondu quand plusieurs personnes remplissent le questionnaire.
+      const prenom = el("input", { class: "saisie", type: "text", id: "prenom", placeholder: "Facultatif", autocomplete: "given-name" });
+      prenom.value = etat.prenom || "";
+      prenom.addEventListener("input", () => { etat.prenom = prenom.value; sauver(); });
+      prenom.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); envoi(envoyer, erreur); } });
       scene("recap",
         el("p", { class: "surtitre", text: "Avant d'envoyer" }),
         el("h2", { text: "Vos réponses" }),
         blocs,
+        el("div", { class: "prenom" }, el("label", { for: "prenom", text: "Votre prénom" }), prenom),
         erreur,
         el("div", { class: "actions" }, envoyer, el("button", { class: "lien", type: "button", text: "← Retour", onclick: () => question(v.length - 1) })));
     }
@@ -499,11 +508,12 @@
       const v = visibles();
       const manquante = v.find(q => q.requis && !texte(q));
       if (manquante) { etat.recapApres = true; return question(v.indexOf(manquante)); }
-      const sujet = "Questionnaire " + Q.client + " · nouvelles réponses";
-      const corpsTexte = v.map(q => q.label + "\n" + (texte(q) || "(pas de réponse)")).join("\n\n");
+      const qui = (etat.prenom || "").trim();
+      const sujet = "Questionnaire " + Q.client + " · " + (qui ? "réponses " + (/^[aeiouyhàâäéèêëîïôöûü]/i.test(qui) ? "d'" : "de ") + qui : "nouvelles réponses");
+      const corpsTexte = (qui ? "Prénom\n" + qui + "\n\n" : "") + v.map(q => q.label + "\n" + (texte(q) || "(pas de réponse)")).join("\n\n");
       if (!CFG.envoiAutomatique) return secours(sujet, corpsTexte);
       bouton.disabled = true;
-      const corps = { _subject: sujet, _template: "box", _captcha: "false", Questionnaire: Q.client };
+      const corps = { _subject: sujet, _template: "box", _captcha: "false", Questionnaire: Q.client, "Prénom": qui || "(non précisé)" };
       v.forEach(q => { corps[q.label] = texte(q) || "(pas de réponse)"; });
       try {
         const rep = await fetch(CFG.envoiAutomatique, {

@@ -32,32 +32,29 @@ window.QUESTIONNAIRE = {
           siReponse: { lieu_test: ["En cabine", "Les deux"] }
         },
         {
+          id: "dates_test",
+          label: "Un test en novembre ou décembre nous convient très bien. Quelles dates vous arrangent ?",
+          type: "texte",
+          placeholder: "Ex. semaine du 16 novembre"
+        },
+        {
           id: "moment_relaxation",
           label: "L'espace de relaxation accueille les invités avant le soin, après ou les deux ?",
           type: "choix",
-          options: ["Avant le soin", "Après le soin", "Les deux"],
-          siReponse: { lieu_test: ["En espace de relaxation", "Les deux"] }
+          options: ["Avant le soin", "Après le soin", "Les deux"]
         },
         {
           id: "objectifs_relaxation",
           label: "Quels objectifs sont visés en priorité dans cet espace ?",
           type: "multi",
           options: ["Relâchement", "Perception du temps d'attente"],
-          autre: true,
-          siReponse: { lieu_test: ["En espace de relaxation", "Les deux"] }
+          autre: true
         },
         {
           id: "personnes_relaxation",
           label: "Combien de personnes s'y trouvent en général en même temps ?",
           type: "texte",
-          placeholder: "Ex. 4 à 6",
-          siReponse: { lieu_test: ["En espace de relaxation", "Les deux"] }
-        },
-        {
-          id: "dates_test",
-          label: "Un test en novembre ou décembre nous convient très bien. Quelles dates vous arrangent ?",
-          type: "texte",
-          placeholder: "Ex. semaine du 16 novembre"
+          placeholder: "Ex. 4 à 6"
         }
       ]
     },

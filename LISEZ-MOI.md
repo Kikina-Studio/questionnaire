@@ -16,7 +16,8 @@ Créé le 13/10/2026 pour Andréa Lopes (LVMH Recherche / Spa Dior). Sert pour t
 2. Remplacer `client`, `titre`, `logoClient`, `images` (accueil, fin) et `image` de chaque section, (ajouter le logo du client dans `logos/`, en SVG si possible), `duree`, `merci` et les questions. `intro` existe en option mais par défaut on n'en met pas.
 3. Types de questions : `texte`, `texte-long`, `choix` (une réponse), `multi` (plusieurs, `autre: true` ajoute un champ libre).
 4. `points` ajoute une liste de sous-questions (a, b, c) au-dessus d'un seul champ, pour regrouper plusieurs questions en un écran. `siReponse` affiche une question seulement selon une réponse précédente (à éviter : Bianca préfère tout afficher avec « Passer », pour ne pas perdre d'information si le client se trompe). `requis: true` rend une question obligatoire.
-5. Mettre en ligne et envoyer le lien.
+5. Créer la page de partage : dupliquer `spa-dior/index.html` dans un dossier au nom court du client (ex. `ken-club/`), changer le titre, la description, l'image (`og:image`, 1200x630) et l'id dans les deux redirections. C'est ce qui s'affiche quand on partage le lien (WhatsApp, Gmail, LinkedIn).
+6. Mettre en ligne et envoyer le lien court : `https://kikina-studio.github.io/questionnaire/<dossier>/`.
 
 Plus simple : demander à Claude « crée un questionnaire pour [client] avec ces questions ».
 

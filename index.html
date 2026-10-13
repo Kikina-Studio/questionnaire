@@ -241,8 +241,13 @@
     const toutes = [];
     Q.sections.forEach((sec, i) => sec.questions.forEach(q => toutes.push(Object.assign({}, q, { _sec: i }))));
 
-    let etat = { r: {}, pos: -1, recapApres: false };
-    try { Object.assign(etat, JSON.parse(localStorage.getItem(cle) || "{}")); } catch (e) {}
+    // Empreinte des questions : si le questionnaire a changé depuis la dernière visite, on repart de l'accueil.
+    const empreinte = JSON.stringify(toutes.map(q => [q.id, q.siReponse || 0]));
+    let etat = { r: {}, pos: -1, recapApres: false, empreinte };
+    try {
+      const ancien = JSON.parse(localStorage.getItem(cle) || "{}");
+      if (ancien.empreinte === empreinte) Object.assign(etat, ancien);
+    } catch (e) {}
     const R = etat.r;
     toutes.forEach(q => { if (!(q.id in R)) R[q.id] = q.type === "multi" ? { choix: [], autre: "" } : ""; });
 

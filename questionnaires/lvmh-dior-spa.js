@@ -4,9 +4,9 @@
 window.QUESTIONNAIRE = {
   id: "lvmh-dior-spa",
   client: "Spa Dior",
-  bonjour: "Hello Andréa,",
-  intro: "Pour que notre proposition sur les deux pistes soit au plus juste, on a besoin de quelques précisions. Comptez cinq minutes. Répondez à ce qui vous concerne, vous pouvez laisser le reste vide.",
-  merci: "Merci, vos réponses sont bien arrivées. On revient vers vous avec une proposition courte et concrète pour les deux pistes.",
+  // Le contexte est dans le mail : la page ne montre que les questions.
+  titre: "Spa Dior",
+  merci: "Merci, vos réponses sont bien arrivées.",
   sections: [
     {
       titre: "Le test à l'Académie",
@@ -74,14 +74,8 @@ window.QUESTIONNAIRE = {
       ]
     },
     {
-      titre: "Pour finir",
+      titre: "Vos coordonnées",
       questions: [
-        {
-          id: "commentaire",
-          label: "Autre chose à nous dire ?",
-          type: "texte-long",
-          placeholder: "Contraintes, interlocuteurs à inclure, calendrier…"
-        },
         {
           id: "nom",
           label: "Votre prénom et nom",

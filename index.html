@@ -204,7 +204,6 @@
 </div>
 </div>
 
-<script src="config.js"></script>
 <script>
 (function () {
   const app = document.getElementById("app");
@@ -213,12 +212,16 @@
   const CONTACT = '<a style="color:inherit" href="mailto:bianca@kikinastudio.com">bianca@kikinastudio.com</a>';
 
   if (!id) return message("Ce lien est incomplet. Écrivez-nous à " + CONTACT + ".");
-  const s = document.createElement("script");
-  // Toujours la dernière version des questions, sans attendre le cache du navigateur.
-  s.src = "questionnaires/" + id + ".js?t=" + Date.now();
-  s.onload = () => window.QUESTIONNAIRE ? demarrer(window.QUESTIONNAIRE) : introuvable();
-  s.onerror = introuvable;
-  document.body.appendChild(s);
+  // Réglages puis questions, toujours dans leur dernière version (sans attendre le cache du navigateur).
+  function charger(src, ok, ko) {
+    const s = document.createElement("script");
+    s.src = src + "?t=" + Date.now();
+    s.onload = ok; s.onerror = ko;
+    document.body.appendChild(s);
+  }
+  const lancer = () => charger("questionnaires/" + id + ".js",
+    () => window.QUESTIONNAIRE ? demarrer(window.QUESTIONNAIRE) : introuvable(), introuvable);
+  charger("config.js", lancer, lancer);
 
   function introuvable() { message("Ce questionnaire n'existe plus ou le lien est incorrect. Écrivez-nous à " + CONTACT + "."); }
   function message(html) { app.innerHTML = '<div class="scene"><p style="max-width:46ch;color:var(--texte-doux)">' + html + "</p></div>"; }

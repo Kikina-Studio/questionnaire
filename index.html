@@ -105,6 +105,8 @@
   .tuile .touche { flex: none; width: 26px; height: 26px; display: grid; place-items: center; border: 1px solid var(--ligne-moyenne); font-size: 11px; font-weight: 400; color: var(--texte-doux); transition: all .25s; }
   .tuile.multi .touche { border-radius: 0; }
   .tuile.choisie { border-color: var(--texte); }
+  .tuile-texte { display: flex; flex-direction: column; gap: 4px; }
+  .tuile-texte small { font-size: 14px; color: var(--texte-doux); line-height: 1.4; }
   .tuile.choisie .touche { background: var(--texte); border-color: var(--texte); color: var(--fond); }
 
   .saisie { width: 100%; font: inherit; font-weight: 300; color: var(--texte); background: transparent; border: 0; border-bottom: 1px solid var(--ligne-moyenne); border-radius: 0; outline: none; transition: border-color .25s; -webkit-appearance: none; appearance: none; }
@@ -363,26 +365,30 @@
       let champ;
       if (q.type === "choix" || q.type === "multi") {
         const multi = q.type === "multi";
+        const libelles = q.options.map(o => typeof o === "string" ? o : o.texte);
         champ = el("div", { class: "tuiles", role: multi ? "group" : "radiogroup", "aria-label": q.label });
-        const tuiles = q.options.map((o, i) => {
+        const tuiles = q.options.map((opt, i) => {
+          const o = libelles[i];
+          const detail = typeof opt === "string" ? null : opt.detail;
           const choisie = multi ? R[q.id].choix.includes(o) : R[q.id] === o;
           const t = el("button", { type: "button", class: "tuile" + (multi ? " multi" : "") + (choisie ? " choisie" : ""), role: multi ? "checkbox" : "radio", "aria-checked": String(choisie) },
-            el("span", { class: "touche", text: String.fromCharCode(65 + i) }), o);
+            el("span", { class: "touche", text: String.fromCharCode(65 + i) }),
+            detail ? el("span", { class: "tuile-texte" }, o, el("small", { text: detail })) : o);
           t.addEventListener("click", () => choisir(i));
           return t;
         });
         champ.append(...tuiles);
         function choisir(i) {
-          const o = q.options[i];
+          const o = libelles[i];
           if (multi) {
             const c = R[q.id].choix;
             c.includes(o) ? c.splice(c.indexOf(o), 1) : c.push(o);
-            R[q.id].choix = q.options.filter(x => c.includes(x));
+            R[q.id].choix = libelles.filter(x => c.includes(x));
           } else {
             R[q.id] = R[q.id] === o ? "" : o;
           }
           tuiles.forEach((t, j) => {
-            const on = multi ? R[q.id].choix.includes(q.options[j]) : R[q.id] === q.options[j];
+            const on = multi ? R[q.id].choix.includes(libelles[j]) : R[q.id] === libelles[j];
             t.classList.toggle("choisie", on); t.setAttribute("aria-checked", String(on));
           });
           sauver(); majSuivant(); erreur.textContent = "";

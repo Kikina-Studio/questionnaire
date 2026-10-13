@@ -64,7 +64,7 @@ window.QUESTIONNAIRE = {
           label: "L'expérience se ferait plutôt avec un équipement fourni par l'hôtel, ou sur le téléphone et les écouteurs de l'invité ?",
           type: "choix",
           options: [
-            "Équipement fourni par l'hôtel (casque, masque, iPad ou TV)",
+            { texte: "Équipement fourni par l'hôtel (casque, masque, iPad ou TV)", detail: "On peut vous accompagner sur le choix, l'achat et la mise en place." },
             "Téléphone et écouteurs de l'invité",
             "Les deux, à discuter"
           ]

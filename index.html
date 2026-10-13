@@ -88,6 +88,10 @@
   .question h2 { font-weight: 300; font-size: clamp(26px, 4.4vw, 38px); line-height: 1.2; letter-spacing: -.01em; margin: 0 0 44px; max-width: 24ch; }
   .question h2.long { max-width: 30ch; font-size: clamp(24px, 3.8vw, 32px); }
   .question h2 .requis { color: var(--texte-pale); }
+  .question h2.avec-points { margin-bottom: 24px; }
+  .points { list-style: none; padding: 0; margin: 0 0 36px; border-top: 1px solid var(--ligne); }
+  .points li { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--ligne); font-size: 17px; line-height: 1.45; }
+  .points li span { flex: none; font-size: 12px; letter-spacing: .1em; color: var(--texte-pale); padding-top: 4px; }
 
   .tuiles { display: grid; gap: 12px; }
   .tuile {
@@ -418,7 +422,8 @@
 
       scene("question",
         el("p", { class: "surtitre" }, el("span", { class: "num", text: String(q._sec + 1).padStart(2, "0") }), sec.titre),
-        el("h2", { class: q.label.length > 90 ? "long" : "" }, q.label, q.requis ? el("span", { class: "requis", text: " *" }) : null),
+        el("h2", { class: (q.label.length > 90 ? "long" : "") + (q.points ? " avec-points" : "") }, q.label, q.requis ? el("span", { class: "requis", text: " *" }) : null),
+        q.points ? el("ol", { class: "points" }, q.points.map((t, k) => el("li", {}, el("span", { text: String.fromCharCode(97 + k) }), t))) : null,
         champ,
         erreur,
         el("div", { class: "actions" }, suivant, retour, el("span", { class: "aide", text: aide })));

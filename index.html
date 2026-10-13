@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Kikina · Questionnaire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: "Whyte Inktrap"; src: url("fonts/WhyteInktrap-Light.ttf") format("truetype"); font-weight: 300; font-display: swap; }
+  @font-face { font-family: "Whyte Inktrap"; src: url("fonts/WhyteInktrap-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "Whyte Inktrap"; src: url("fonts/WhyteInktrap-Medium.ttf") format("truetype"); font-weight: 500; font-display: swap; }
+
+  :root {
+    --nuit: #050b2b;
+    --bleu-profond: #0b1f7a;
+    --bleu: #2f5bff;
+    --bleu-clair: #9fb6ff;
+    --lavande: #d49ff9;
+    --creme: #f4f1ea;
+    --texte: #f4f1ea;
+    --texte-doux: rgba(244, 241, 234, .68);
+    --ligne: rgba(244, 241, 234, .18);
+    --champ: rgba(5, 11, 43, .35);
+    --erreur: #ffb4a8;
+    --titre: "Whyte Inktrap", "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; min-height: 100vh; color: var(--texte); font-family: var(--mono); font-size: 15px; line-height: 1.6;
+    background: var(--nuit);
+    background-image:
+      radial-gradient(120% 70% at 85% 0%, rgba(47, 91, 255, .85) 0%, rgba(11, 31, 122, .6) 40%, transparent 75%),
+      radial-gradient(90% 60% at 0% 100%, rgba(212, 159, 249, .28) 0%, transparent 60%),
+      linear-gradient(180deg, var(--bleu-profond) 0%, var(--nuit) 70%);
+    background-attachment: fixed;
+  }
+  /* Grain */
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .22; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .page { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; padding: 32px 20px 120px; }
+
+  header { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 72px; }
+  .logo { font-family: var(--titre); font-weight: 500; font-size: 22px; letter-spacing: .01em; }
+  .tag { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--texte-doux); text-align: right; }
+
+  h1 { font-family: var(--titre); font-weight: 300; font-size: clamp(34px, 7vw, 52px); line-height: 1.05; margin: 0 0 24px; letter-spacing: -.01em; }
+  .intro { color: var(--texte-doux); max-width: 56ch; margin: 0 0 56px; }
+
+  .section { margin: 0 0 64px; }
+  .section-titre { display: flex; align-items: baseline; gap: 14px; border-top: 1px solid var(--ligne); padding-top: 20px; margin-bottom: 28px; }
+  .section-titre .num { font-size: 12px; color: var(--lavande); letter-spacing: .08em; }
+  .section-titre h2 { font-family: var(--titre); font-weight: 400; font-size: 24px; margin: 0; }
+
+  .q { margin: 0 0 36px; transition: opacity .25s; }
+  .q[hidden] { display: none; }
+  .q-label { display: block; font-size: 15px; margin-bottom: 14px; max-width: 60ch; }
+  .q-label .requis { color: var(--lavande); }
+
+  input[type=text], textarea {
+    width: 100%; font: inherit; color: var(--texte); background: var(--champ);
+    border: 1px solid var(--ligne); border-radius: 2px; padding: 14px 16px; outline: none;
+    transition: border-color .2s, background .2s;
+  }
+  textarea { min-height: 112px; resize: vertical; }
+  input[type=text]::placeholder, textarea::placeholder { color: rgba(244, 241, 234, .35); }
+  input[type=text]:focus, textarea:focus { border-color: var(--bleu-clair); background: rgba(5, 11, 43, .55); }
+
+  .options { display: flex; flex-wrap: wrap; gap: 10px; }
+  .opt { position: relative; }
+  .opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .opt span {
+    display: inline-block; padding: 10px 16px; border: 1px solid var(--ligne); border-radius: 2px;
+    font-size: 14px; cursor: pointer; transition: all .2s; user-select: none;
+  }
+  .opt span::before { content: "[ ]"; margin-right: 10px; color: var(--texte-doux); }
+  .opt input:checked + span { border-color: var(--lavande); background: rgba(212, 159, 249, .14); }
+  .opt input:checked + span::before { content: "[x]"; color: var(--lavande); }
+  .opt input:focus-visible + span { outline: 2px solid var(--bleu-clair); outline-offset: 2px; }
+  .opt:hover span { border-color: rgba(244, 241, 234, .45); }
+  .autre-champ { margin-top: 12px; }
+
+  .envoi { border-top: 1px solid var(--ligne); padding-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 18px 24px; }
+  button {
+    font: inherit; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
+    color: var(--nuit); background: var(--creme); border: 0; border-radius: 2px; padding: 16px 28px; transition: background .2s, transform .1s;
+  }
+  button:hover { background: #fff; }
+  button:active { transform: translateY(1px); }
+  button:disabled { opacity: .5; cursor: wait; }
+  button.secondaire { background: transparent; color: var(--texte); border: 1px solid var(--ligne); }
+  .note { font-size: 12px; color: var(--texte-doux); }
+  .erreur { color: var(--erreur); font-size: 13px; margin-top: 8px; }
+
+  .fin { padding-top: 24px; }
+  .fin p { color: var(--texte-doux); max-width: 56ch; }
+  .fin .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .fin a.bouton { display: inline-block; text-decoration: none; color: var(--nuit); background: var(--creme); padding: 16px 28px; border-radius: 2px; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
+
+  footer { margin-top: 96px; font-size: 12px; color: var(--texte-doux); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer a { color: inherit; }
+
+  @media (max-width: 520px) {
+    .page { padding: 24px 16px 96px; }
+    header { margin-bottom: 48px; }
+    .options { flex-direction: column; }
+    .opt span { display: block; }
+    button, .fin a.bouton { width: 100%; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="logo">Kikina</div>
+    <div class="tag" id="tag"></div>
+  </header>
+
+  <main id="app">
+    <p class="note">Chargement…</p>
+  </main>
+
+  <footer>
+    <span>Kikina · Composé avec des neuroscientifiques</span>
+    <a href="https://kikina.fr" target="_blank" rel="noopener">kikina.fr</a>
+  </footer>
+</div>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  const app = document.getElementById("app");
+  const params = new URLSearchParams(location.search);
+  const id = (params.get("q") || "").toLowerCase().replace(/[^a-z0-9-]/g, "");
+
+  if (!id) { app.innerHTML = '<p class="intro">Ce lien est incomplet. Écrivez-nous à <a style="color:inherit" href="mailto:bianca@kikinastudio.com">bianca@kikinastudio.com</a>.</p>'; return; }
+
+  const s = document.createElement("script");
+  s.src = "questionnaires/" + id + ".js";
+  s.onload = () => window.QUESTIONNAIRE ? demarrer(window.QUESTIONNAIRE) : introuvable();
+  s.onerror = introuvable;
+  document.body.appendChild(s);
+
+  function introuvable() {
+    app.innerHTML = '<p class="intro">Ce questionnaire n\'existe plus ou le lien est incorrect. Écrivez-nous à <a style="color:inherit" href="mailto:bianca@kikinastudio.com">bianca@kikinastudio.com</a>.</p>';
+  }
+
+  function el(tag, attrs, ...enfants) {
+    const n = document.createElement(tag);
+    for (const k in attrs || {}) {
+      if (k === "class") n.className = attrs[k];
+      else if (k === "text") n.textContent = attrs[k];
+      else n.setAttribute(k, attrs[k]);
+    }
+    enfants.flat().forEach(c => c && n.appendChild(typeof c === "string" ? document.createTextNode(c) : c));
+    return n;
+  }
+
+  function demarrer(Q) {
+    const CFG = window.KIKINA_CONFIG || {};
+    const cleBrouillon = "kikina-questionnaire-" + Q.id;
+    document.title = "Kikina · " + Q.client;
+    document.getElementById("tag").textContent = "[ " + Q.client + " ]";
+
+    const questions = Q.sections.flatMap(sec => sec.questions);
+    let brouillon = {};
+    try { brouillon = JSON.parse(localStorage.getItem(cleBrouillon) || "{}"); } catch (e) {}
+
+    app.innerHTML = "";
+    app.appendChild(el("h1", { text: Q.bonjour }));
+    app.appendChild(el("p", { class: "intro", text: Q.intro }));
+
+    const form = el("form", { novalidate: "" });
+    Q.sections.forEach((sec, i) => {
+      const bloc = el("section", { class: "section" },
+        el("div", { class: "section-titre" },
+          el("span", { class: "num", text: "[" + String(i + 1).padStart(2, "0") + "]" }),
+          el("h2", { text: sec.titre })));
+      sec.questions.forEach(q => bloc.appendChild(champ(q)));
+      form.appendChild(bloc);
+    });
+
+    const erreur = el("div", { class: "erreur", role: "alert" });
+    const bouton = el("button", { type: "submit", text: "Envoyer mes réponses" });
+    form.appendChild(el("div", { class: "envoi" }, bouton,
+      el("span", { class: "note", text: "Vos réponses sont gardées sur cet appareil tant que vous ne les avez pas envoyées." }), erreur));
+    app.appendChild(form);
+
+    function champ(q) {
+      const wrap = el("div", { class: "q", "data-id": q.id });
+      const lid = "q-" + q.id;
+      const label = el(q.type === "choix" || q.type === "multi" ? "div" : "label", { class: "q-label", for: lid, id: lid + "-label" }, q.label);
+      if (q.requis) label.appendChild(el("span", { class: "requis", text: " *" }));
+      wrap.appendChild(label);
+      const val = brouillon[q.id];
+
+      if (q.type === "texte" || q.type === "texte-long") {
+        const input = q.type === "texte" ? el("input", { type: "text", id: lid, name: q.id }) : el("textarea", { id: lid, name: q.id });
+        if (q.placeholder) input.placeholder = q.placeholder;
+        if (typeof val === "string") input.value = val;
+        wrap.appendChild(input);
+      } else {
+        const multi = q.type === "multi";
+        const opts = el("div", { class: "options", role: multi ? "group" : "radiogroup", "aria-labelledby": lid + "-label" });
+        const choisies = multi ? (val && val.choix) || [] : [val];
+        q.options.forEach(o => {
+          const input = el("input", { type: multi ? "checkbox" : "radio", name: q.id, value: o });
+          if (choisies.includes(o)) input.checked = true;
+          opts.appendChild(el("label", { class: "opt" }, input, el("span", { text: o })));
+        });
+        wrap.appendChild(opts);
+        if (q.autre) {
+          const autre = el("input", { type: "text", class: "autre-champ", name: q.id + "__autre", placeholder: "Autre, précisez", "aria-label": "Autre objectif" });
+          if (val && val.autre) autre.value = val.autre;
+          wrap.appendChild(autre);
+        }
+        if (!multi) {
+          // Un second clic sur une option déjà cochée la décoche.
+          opts.addEventListener("click", e => {
+            const r = e.target.closest("input[type=radio]");
+            if (!r) return;
+            if (r.dataset.etait === "1") { r.checked = false; r.dataset.etait = ""; form.dispatchEvent(new Event("input")); }
+            else opts.querySelectorAll("input").forEach(x => x.dataset.etait = x === r ? "1" : "");
+          });
+          opts.querySelectorAll("input:checked").forEach(x => x.dataset.etait = "1");
+        }
+      }
+      return wrap;
+    }
+
+    function lire() {
+      const fd = new FormData(form), r = {};
+      questions.forEach(q => {
+        if (q.type === "multi") r[q.id] = { choix: fd.getAll(q.id), autre: (fd.get(q.id + "__autre") || "").trim() };
+        else r[q.id] = (fd.get(q.id) || "").toString().trim();
+      });
+      return r;
+    }
+
+    function visible(q, r) {
+      if (!q.siReponse) return true;
+      return Object.entries(q.siReponse).every(([k, vals]) => vals.includes(r[k]));
+    }
+
+    function maj() {
+      const r = lire();
+      questions.forEach(q => { form.querySelector('[data-id="' + q.id + '"]').hidden = !visible(q, r); });
+      try { localStorage.setItem(cleBrouillon, JSON.stringify(r)); } catch (e) {}
+    }
+    form.addEventListener("input", maj);
+    form.addEventListener("change", maj);
+    maj();
+
+    function texteReponse(q, v) {
+      if (q.type === "multi") return [...v.choix, v.autre ? "Autre : " + v.autre : ""].filter(Boolean).join(", ");
+      return v;
+    }
+
+    function recap(r) {
+      return questions.filter(q => visible(q, r)).map(q => {
+        const t = texteReponse(q, r[q.id]);
+        return q.label + "\n" + (t || "(pas de réponse)");
+      }).join("\n\n");
+    }
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      erreur.textContent = "";
+      const r = lire();
+      const manquante = questions.find(q => q.requis && visible(q, r) && !texteReponse(q, r[q.id]));
+      if (manquante) {
+        erreur.textContent = "Il manque : " + manquante.label.toLowerCase();
+        const n = form.querySelector('[data-id="' + manquante.id + '"] input, [data-id="' + manquante.id + '"] textarea');
+        n && n.focus();
+        return;
+      }
+      const sujet = "Questionnaire " + Q.client + " · réponses de " + (r.nom || "un client");
+      if (!CFG.envoiAutomatique) return finir(false, sujet, recap(r));
+
+      bouton.disabled = true; bouton.textContent = "Envoi…";
+      const corps = { _subject: sujet, _template: "box", _captcha: "false", Questionnaire: Q.client };
+      questions.filter(q => visible(q, r)).forEach(q => { corps[q.label] = texteReponse(q, r[q.id]) || "(pas de réponse)"; });
+      try {
+        const rep = await fetch(CFG.envoiAutomatique, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify(corps)
+        });
+        const json = await rep.json().catch(() => ({}));
+        if (!rep.ok || json.success === false || json.success === "false") throw new Error("envoi");
+        finir(true);
+      } catch (err) {
+        finir(false, sujet, recap(r));
+      }
+    });
+
+    function finir(envoye, sujet, texte) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (envoye) {
+        try { localStorage.removeItem(cleBrouillon); } catch (e) {}
+        app.innerHTML = "";
+        app.appendChild(el("h1", { text: "Merci." }));
+        app.appendChild(el("div", { class: "fin" }, el("p", { text: Q.merci })));
+        return;
+      }
+      const dest = CFG.destinataire || "bianca@kikinastudio.com";
+      const mailto = "mailto:" + dest + "?subject=" + encodeURIComponent(sujet) + "&body=" + encodeURIComponent(texte);
+      const copier = el("button", { type: "button", class: "secondaire", text: "Copier mes réponses" });
+      copier.addEventListener("click", async () => {
+        try { await navigator.clipboard.writeText(texte); copier.textContent = "Copié"; } catch (e) { copier.textContent = "Copie impossible"; }
+      });
+      const retour = el("button", { type: "button", class: "secondaire", text: "Modifier" });
+      retour.addEventListener("click", () => demarrer(Q));
+      app.innerHTML = "";
+      app.appendChild(el("h1", { text: "Dernière étape." }));
+      app.appendChild(el("div", { class: "fin" },
+        el("p", { text: "Vos réponses sont prêtes. Le bouton ci-dessous ouvre un mail déjà rempli vers " + dest + ", il suffit de l'envoyer." }),
+        el("div", { class: "actions" }, el("a", { class: "bouton", href: mailto, text: "Ouvrir le mail" }), copier, retour)));
+    }
+  }
+})();
+</script>
+</body>
+</html>

@@ -6,7 +6,7 @@ window.QUESTIONNAIRE = {
   client: "Spa Dior",
   // Le contexte est dans le mail : la page ne montre que les questions.
   titre: "Spa Dior",
-  accroche: "Le son est l'architecture invisible d'un soin. Kikina le compose avec des chercheurs en neurosciences pour qu'il s'adapte à l'espace et au corps, en cabine comme en chambre.",
+  accroche: "Le son est l'architecture invisible d'un soin. Kikina le compose avec des chercheurs en neurosciences pour qu'il s'adapte à l'espace et au corps, de l'accueil du spa jusqu'au sommeil.",
   logoClient: "logos/dior.svg",
   duree: "2 minutes",
   // Photos : visuels officiels du Dior Spa Cheval Blanc Paris (images/dior/, réservés à ce questionnaire Dior)

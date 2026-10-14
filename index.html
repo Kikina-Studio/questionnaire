@@ -125,7 +125,7 @@
   .avec-icone { position: relative; }
   .avec-icone .icone { position: absolute; left: 0; top: 50%; transform: translateY(-58%); color: var(--texte-doux); display: flex; }
   .avec-icone .saisie { padding-left: 38px; }
-  .accroche { max-width: 46ch; margin: 0 auto 44px; color: var(--texte-doux); font-size: 15px; line-height: 1.6; }
+  .accroche { max-width: 46ch; margin: -32px auto 48px; color: var(--texte-doux); font-size: 15px; line-height: 1.6; }
   .tuile-texte { display: flex; flex-direction: column; gap: 4px; }
   .tuile-texte small { font-size: 14px; color: var(--texte-doux); line-height: 1.4; }
   .tuile.choisie .touche { background: var(--texte); border-color: var(--texte); color: var(--fond); }
@@ -387,8 +387,8 @@
           el("button", { class: "bouton", type: "button", onclick: () => question(0) }, "Commencer", el("span", { text: "→", "aria-hidden": "true" })));
       }
       scene("accueil",
-        Q.accroche ? el("p", { class: "accroche", text: Q.accroche }) : null,
         logos(),
+        Q.accroche ? el("p", { class: "accroche", text: Q.accroche }) : null,
         el("h1", { text: Q.titre || Q.client }),
         el("p", { class: "format", text: toutes.length + " questions courtes" + (Q.duree ? " · " + Q.duree : "") }),
         onde,

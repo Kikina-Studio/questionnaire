@@ -48,13 +48,13 @@
   .sans-visuel .visuel { display: none; }
   .legende {
     position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; margin: 0; padding: 120px 48px 52px;
-    color: #fff; font-size: clamp(20px, 2vw, 28px); font-weight: 300; line-height: 1.35; letter-spacing: -.005em;
+    color: #fff; font-size: clamp(17px, 1.6vw, 22px); font-weight: 300; line-height: 1.4; letter-spacing: -.005em;
     background: linear-gradient(180deg, rgba(10, 10, 12, 0) 0%, rgba(10, 10, 12, .35) 45%, rgba(10, 10, 12, .68) 100%);
     opacity: 0; transform: translateY(10px); transition: opacity 1s var(--courbe), transform 1s var(--courbe); pointer-events: none;
   }
   body.avec-legende .legende { opacity: 1; transform: none; }
   @media (max-width: 900px) {
-    .legende { font-size: 17px; padding: 70px 24px 22px; }
+    .legende { font-size: 15px; padding: 70px 24px 22px; }
   }
   .colonne { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
   button { font: inherit; }

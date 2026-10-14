@@ -46,6 +46,16 @@
   .visuel img.on { opacity: 1; transform: scale(1); }
   .visuel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(17,17,17,0) 60%, rgba(17,17,17,.18)); pointer-events: none; }
   .sans-visuel .visuel { display: none; }
+  .legende {
+    position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; margin: 0; padding: 120px 48px 52px;
+    color: #fff; font-size: clamp(20px, 2vw, 28px); font-weight: 300; line-height: 1.35; letter-spacing: -.005em;
+    background: linear-gradient(180deg, rgba(10, 10, 12, 0) 0%, rgba(10, 10, 12, .35) 45%, rgba(10, 10, 12, .68) 100%);
+    opacity: 0; transform: translateY(10px); transition: opacity 1s var(--courbe), transform 1s var(--courbe); pointer-events: none;
+  }
+  body.avec-legende .legende { opacity: 1; transform: none; }
+  @media (max-width: 900px) {
+    .legende { font-size: 17px; padding: 70px 24px 22px; }
+  }
   .colonne { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
   button { font: inherit; }
   img { display: block; }
@@ -209,7 +219,7 @@
 </head>
 <body>
 <div class="cadre sans-visuel" id="cadre">
-<aside class="visuel" aria-hidden="true"><img alt="" id="img-a"><img alt="" id="img-b"></aside>
+<aside class="visuel"><img alt="" id="img-a"><img alt="" id="img-b"><p class="legende" id="legende"></p></aside>
 <div class="colonne">
 <div class="barre cachee" id="barre">
   <div class="barre-int">
@@ -312,6 +322,7 @@
     const aDesImages = !!(IM.accueil || Q.sections.some(sec => sec.image));
     if (aDesImages) document.getElementById("cadre").classList.remove("sans-visuel");
     const calques = [document.getElementById("img-a"), document.getElementById("img-b")];
+    const legende = document.getElementById("legende");
     let calque = 0, imageCourante = "";
     function visuel(src, enQuestion) {
       document.body.classList.toggle("en-question", !!enQuestion);
@@ -327,6 +338,7 @@
     [IM.accueil, IM.fin, ...Q.sections.map(sec => sec.image)].filter(Boolean).forEach(src => { new Image().src = src; });
 
     function scene(classe, ...enfants) {
+      if (classe !== "accueil") document.body.classList.remove("avec-legende");
       if (classe !== "question") document.body.classList.remove("nuit");
       app.innerHTML = "";
       const sc = el("div", { class: "scene entre " + (classe || "") }, ...enfants);
@@ -350,6 +362,9 @@
     // Accueil
     function accueil() {
       etat.pos = -1; sauver(); majBarre(-1); visuel(IM.accueil);
+      // L'accroche s'affiche sur la photo, à l'accueil seulement.
+      legende.textContent = Q.accroche || "";
+      document.body.classList.add("avec-legende");
       const onde = el("div", { class: "onde", "aria-hidden": "true" });
       [10, 18, 28, 16, 34, 22, 40, 26, 14, 30, 20, 36, 18, 24, 12].forEach((h, i) =>
         onde.appendChild(el("i", { style: "height:" + h + "px;animation-delay:" + (i * -0.17).toFixed(2) + "s" })));
@@ -388,7 +403,7 @@
       }
       scene("accueil",
         logos(),
-        Q.accroche ? el("p", { class: "accroche", text: Q.accroche }) : null,
+        Q.accroche && !aDesImages ? el("p", { class: "accroche", text: Q.accroche }) : null,
         el("h1", { text: Q.titre || Q.client }),
         el("p", { class: "format", text: toutes.length + " questions courtes" + (Q.duree ? " · " + Q.duree : "") }),
         onde,

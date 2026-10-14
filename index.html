@@ -191,13 +191,47 @@
   @media (max-width: 900px) {
     .cadre { flex-direction: column; }
     .visuel { position: relative; width: 100%; height: 38vh; transition: height .8s var(--courbe); }
-    body.en-question .visuel { height: 128px; }
+    body.en-question .visuel { height: 110px; }
+    .visuel { height: 32vh; }
+    /* Bouton toujours visible en bas de l'écran */
+    .question .actions, .recap .actions {
+      position: sticky; bottom: 0; z-index: 4; margin: 32px -28px 0; padding: 16px 28px calc(16px + env(safe-area-inset-bottom));
+      background: var(--fond); border-top: 1px solid var(--ligne); flex-wrap: nowrap; gap: 18px; transition: background-color .9s ease;
+    }
+    .question .actions .lien, .recap .actions .lien { flex: none; }
+    .question .actions .aide { display: none; }
+    .accueil .duo { margin-bottom: 44px; }
+    .accueil .format { margin-bottom: 36px; }
+    .onde { margin-bottom: 36px; }
+    .etapes { margin-bottom: 40px; }
     .scene { padding: 48px 28px 48px; justify-content: flex-start; }
     .barre-int { padding: 18px 28px 14px; }
     .progression { padding: 0 28px; }
     footer { padding: 20px 28px 28px; }
   }
   @media (max-width: 560px) {
+    /* Mobile : écrans plus compacts, bouton toujours visible en bas */
+    .visuel { height: 30vh; }
+    body.en-question .visuel { height: 88px; }
+    .scene { padding: 26px 20px 24px; }
+    .accueil { padding-top: 32px; }
+    .accueil .duo { margin-bottom: 30px; }
+    .accueil h1 { margin-bottom: 14px; }
+    .accueil .format { margin-bottom: 26px; }
+    .onde { margin-bottom: 26px; height: 32px; }
+    .etapes { margin-bottom: 28px; }
+    .etapes li { padding: 12px 2px; }
+    .surtitre { margin-bottom: 16px; }
+    .question h2, .question h2.long { font-size: 23px; margin-bottom: 26px; }
+    .question h2.avec-points { margin-bottom: 18px; }
+    .tuiles { gap: 8px; }
+    .groupe { gap: 22px; }
+    .tuiles.compactes.n4 { grid-template-columns: 1fr 1fr; }
+    .groupe-label { margin-bottom: 10px; font-size: 16px; }
+    .tuile-texte small { font-size: 13px; }
+    textarea.saisie { min-height: 96px; }
+    .question .actions, .recap .actions { margin: 24px -20px 0; padding: 14px 20px calc(14px + env(safe-area-inset-bottom)); }
+    .question .actions .bouton, .recap .actions .bouton { flex: 1; padding: 16px 20px; }
     .barre-int { padding: 16px 20px 14px; }
     .progression { padding: 0 20px; }
     .duo .kikina { height: 13px; }
@@ -413,7 +447,7 @@
 
     // Groupe de tuiles à choix unique (utilisé dans les questions à plusieurs champs).
     function petitesTuiles(options, valeur, auChoix) {
-      const box = el("div", { class: "tuiles compactes", role: "radiogroup" });
+      const box = el("div", { class: "tuiles compactes n" + options.length, role: "radiogroup" });
       const ts = options.map(o => {
         const t = el("button", { type: "button", class: "tuile" + (valeur() === o ? " choisie" : ""), role: "radio", "aria-checked": String(valeur() === o) }, o);
         t.addEventListener("click", () => {

@@ -9,16 +9,17 @@ window.QUESTIONNAIRE = {
   accroche: "Le son est l'architecture invisible d'un soin. Kikina le compose avec des chercheurs en neurosciences pour qu'il s'adapte à l'espace et au corps, en cabine comme en chambre.",
   logoClient: "logos/dior.svg",
   duree: "2 minutes",
-  // Photos Unsplash (licence libre), stockées dans images/spa/.
+  // Photos : brochure officielle Dior Spa Plaza Athénée (images/dior/, réservées à ce questionnaire Dior)
+  // + chambre de nuit Unsplash pour le sommeil (images/spa/).
   images: {
-    accueil: "images/spa/accueil-piscine.jpg",
-    fin: "images/spa/fin-lin.jpg"
+    accueil: "images/dior/accueil-plaza.jpg",
+    fin: "images/dior/salon-relaxation.jpg"
   },
   merci: "Merci, vos réponses sont bien arrivées.",
   sections: [
     {
       titre: "Le test à l'Académie",
-      image: "images/spa/soin-cabine.jpg",
+      image: "images/dior/soin-visage.jpg",
       questions: [
         {
           id: "lieu_test",

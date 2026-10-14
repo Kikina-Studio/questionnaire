@@ -6,7 +6,7 @@ window.QUESTIONNAIRE = {
   client: "Spa Dior",
   // Le contexte est dans le mail : la page ne montre que les questions.
   titre: "Spa Dior",
-  accroche: "Kikina compose, avec des chercheurs en neurosciences, un son qui s'adapte à l'espace et au corps, pour accompagner le soin en cabine comme le sommeil en chambre.",
+  accroche: "Le son est l'architecture invisible d'un soin. Kikina le compose avec des chercheurs en neurosciences pour qu'il s'adapte à l'espace et au corps, en cabine comme en chambre.",
   logoClient: "logos/dior.svg",
   duree: "2 minutes",
   // Photos Unsplash (licence libre), stockées dans images/spa/.
